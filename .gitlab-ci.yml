@@ -75,7 +75,7 @@
 # #     paths:
 # #       - .kube/
 
-image: docker:stable
+image: dtzar/helm-kubectl
 variables:
   KUBECTL: v1.17.0
   KIND: v0.8.1
@@ -89,8 +89,6 @@ test:
     - apk add -U wget
     - wget -O /usr/local/bin/kind https://github.com/kubernetes-sigs/kind/releases/download/${KIND}/kind-linux-amd64
     - chmod +x /usr/local/bin/kind
-    - wget -O /usr/local/bin/kubectl https://storage.googleapis.com/kubernetes-release/release/${KUBECTL}/bin/linux/amd64/kubectl
-    - chmod +x /usr/local/bin/kubectl
     - kind create cluster --config=./gitlab/kind-config.yaml
     - sed -i -E -e 's/localhost|0\.0\.0\.0/docker/g' "$HOME/.kube/config"
     - kubectl apply -f https://raw.githubusercontent.com/litmuschaos/litmus/master/litmus-portal/k8s-manifest.yml
