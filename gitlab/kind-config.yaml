@@ -14,4 +14,3 @@ kubeadmConfigPatchesJSON6902:
         value: docker
 nodes:
   - role: control-plane
-  - role: worker
