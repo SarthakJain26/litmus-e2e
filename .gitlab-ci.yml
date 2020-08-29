@@ -75,7 +75,7 @@
 # #     paths:
 # #       - .kube/
 
-image: docker/stable
+image: docker:stable
 stages:
   - test
 test:
