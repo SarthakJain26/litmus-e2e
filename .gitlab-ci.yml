@@ -75,13 +75,12 @@
 # #     paths:
 # #       - .kube/
 
-image: dtzar/helm-kubectl
+image: docker/stable
 stages:
   - test
 test:
   stage: test
   script:
-    - apt-get install docker-ce docker-ce-cli containerd.io
     - curl -Lo ./kind https://kind.sigs.k8s.io/dl/v0.8.1/kind-linux-amd64
     - chmod +x ./kind
     - mv ./kind /usr/local/bin/kind
