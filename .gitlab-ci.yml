@@ -1,10 +1,3 @@
-image: docker:stable
-variables:
-  KUBECTL: v1.17.0
-  KIND: v0.8.1
-services:
-  - docker:dind
----
 stages:
   # - setup
   - build
@@ -40,13 +33,7 @@ App Cluster Setup:
   # tags:
   #   - litmus-portal
   before_script:
-    - apk add -U wget
-    - wget -O /usr/local/bin/kind https://github.com/kubernetes-sigs/kind/releases/download/${KIND}/kind-linux-amd64
-    - chmod +x /usr/local/bin/kind
-    - wget -O /usr/local/bin/kubectl https://storage.googleapis.com/kubernetes-release/release/${KUBECTL}/bin/linux/amd64/kubectl
-    - chmod +x /usr/local/bin/kubectl
-    - kind create cluster --config=./gitlab/kind-config.yaml
-    - sed -i -E -e 's/localhost|0\.0\.0\.0/docker/g' "$HOME/.kube/config"
+    - curl -sfL https://get.k3s.io | sh -
   script: 
     - git clone https://github.com/litmuschaos/litmus.git
     - kubectl apply -f litmus/litmus-portal/k8s-manifest.yml
