@@ -85,7 +85,6 @@ stages:
   - test
 test:
   stage: test
-  image: cypress/base:10
   script:
     - apk add -U wget
     - wget -O /usr/local/bin/kind https://github.com/kubernetes-sigs/kind/releases/download/${KIND}/kind-linux-amd64
