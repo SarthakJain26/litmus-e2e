@@ -13,7 +13,9 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
-    "cypress": "^4.10.0",
+    "cypress": "^4.12.1",
+    "cypress-axe": "^0.8.1",
+    "cypress-localstorage-commands": "^1.2.1",
     "wait-on": "^5.1.0"
   }
 }

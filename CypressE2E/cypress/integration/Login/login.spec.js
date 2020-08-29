@@ -1,5 +1,4 @@
 /// <reference types="Cypress" />
-
 describe("Testing the accessibility of Login page",()=>{
     
     it("Visiting the Login Page",()=>{
@@ -8,7 +7,6 @@ describe("Testing the accessibility of Login page",()=>{
         cy.url().should('include','/login');
         cy.log("Visited the Login page Successfully");
     });
-
 })
 
 describe("Checking functionality of Login Page",()=>{
@@ -24,30 +22,26 @@ describe("Checking functionality of Login Page",()=>{
     })
 
     it("Testing the only single input sign in [ Should not be possible ]",()=>{
-        cy.loginServer(503);
-        cy.login("Vedant"," ");
+        cy.loginServer(503,"Vedant"," ");
         cy.url().should('include','/login');
         cy.get('[name=username]').clear();
         cy.get('[name=password]').clear();
-        cy.login(" ","Litmus");
+        cy.loginServer(503," ","1234");
         cy.url().should('include','/login');
     })
 
     it("Testing with wrong details [ Should not be possible ]",()=>{
-        cy.loginServer(503);
-        cy.login("Vedant","Litmus");
+        cy.loginServer(503,"Vedant","litmus");
         cy.url().should('include','/login');
     })
 
     it("Testing with without any details [ Should not be possible ]",()=>{
-        cy.loginServer(503);
-        cy.login(" "," ");
+        cy.loginServer(503," "," ");
         cy.url().should('include','/login');
     })
 
     it("Testing with Correct details [ Must redirect to Welcome modal ]",()=>{
-        cy.loginServer(200);
-        cy.login("Vedant","Litmus");
+        cy.loginServer(200,"Vedant","litmus");
         cy.contains("Welcome to Litmus Portal");
         indexedDB.deleteDatabase('localforage');
     })

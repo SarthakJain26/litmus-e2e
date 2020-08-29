@@ -21,16 +21,12 @@ describe("Testing the routes functionality without Login [ Must redirect to Logi
 })
 
 describe("Testing the routes with login",()=>{
-    before("Login in to Web App",()=>{
-        cy.loginServer(200);
-        cy.visit('/login');
-        cy.login('Vedant','Litmus');
-    })
-
-    after("Deleting the database from Indexed DB",()=>{
+    beforeEach("Login in to Web App",()=>{
         indexedDB.deleteDatabase('localforage');
-    })
-
+        cy.visit('/');
+        cy.loginServer(200,"Vedant","1234");
+    });
+    
     context("Testing routes functionality with login",()=>{
         ["workflow","homepage","community"].map((page)=>{
             it("Visiting the "+page+" page after login",()=>{
