@@ -106,6 +106,7 @@ Cypress-e2e:
   # tags:
   #   - litmus-portal
   script:
+    - kubectl get pods -n litmus
     - cd CypressE2E && npm ci
     - npm test
   artifacts:
