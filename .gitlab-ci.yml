@@ -75,13 +75,17 @@
 # #     paths:
 # #       - .kube/
 
-image: dtzar/helm-kubectl
+image: docker:stable
 stages:
   - test
+services:
+  - docker:dind
 test:
   stage: test
   script:
-    - apk add -U wget
+    - curl -LO "https://storage.googleapis.com/kubernetes-release/release/$(curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt)/bin/linux/amd64/kubectl"
+    - chmod +x ./kubectl
+    - mv ./kubectl /usr/local/bin/kubectl
     - curl -Lo ./kind https://kind.sigs.k8s.io/dl/v0.8.1/kind-linux-amd64
     - chmod +x ./kind
     - mv ./kind /usr/local/bin/kind
