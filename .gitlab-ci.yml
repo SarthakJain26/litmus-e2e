@@ -76,6 +76,8 @@
 # #       - .kube/
 
 image: docker:stable
+services:
+  - docker:dind
 stages:
   - test
 test:
