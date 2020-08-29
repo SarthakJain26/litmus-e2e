@@ -91,7 +91,6 @@ test:
     - chmod +x ./kind
     - mv ./kind /usr/local/bin/kind
     - kind create cluster
-    - kubectl cluster-info --context kind-kind
     - kind get kubeconfig --internal >$HOME/.kube/config
     - kubectl get nodes
     - kubectl apply -f https://raw.githubusercontent.com/litmuschaos/litmus/master/litmus-portal/k8s-manifest.yml
