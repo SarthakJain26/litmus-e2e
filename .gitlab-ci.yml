@@ -1,11 +1,16 @@
+image: docker:latest
+
+services:
+  - docker:dind
+
 stages:
   # - setup
   - build
   - cypress-test
   # - cleanup
 
-
 variables:
+  DOCKER_DRIVER: overlay
   npm_config_cache: "$CI_PROJECT_DIR/CypressE2E/.npm"
   CYPRESS_CACHE_FOLDER: "$CI_PROJECT_DIR/CypressE2E/cache/Cypress"
 
@@ -32,8 +37,7 @@ App Cluster Setup:
   stage: build
   # tags:
   #   - litmus-portal
-  before_script:
-    - curl -sfL https://get.k3s.io | sh -
+
   script: 
     - git clone https://github.com/litmuschaos/litmus.git
     - kubectl apply -f litmus/litmus-portal/k8s-manifest.yml
