@@ -93,7 +93,7 @@ test:
     - kind create cluster --config=./gitlab/kind-config.yaml
     - sed -i -E -e 's/localhost|0\.0\.0\.0/docker/g' "$HOME/.kube/config"
     - kubectl apply -f https://raw.githubusercontent.com/litmuschaos/litmus/master/litmus-portal/k8s-manifest.yml
-    - kubectl wait --for=condition=Ready pods --all --namespace litmus
+    - kubectl wait --for=condition=Ready pods --all --namespace litmus --timeout=100s
     - export frontendPodName=$(kubectl get pods -l component=litmusportal-frontend --template '{{range .items}}{{.metadata.name}}{{"\n"}}{{end}}' -n litmus)
     - export frontendPodPort=$(kubectl get pod $frontendPodName --template='{{(index (index .spec.containers 0).ports 0).containerPort}}{{"\n"}}' --namespace litmus)
     - kubectl port-forward $frontendPodName -n litmus 3000:$frontendPodPort &
