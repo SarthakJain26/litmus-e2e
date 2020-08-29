@@ -1,77 +1,98 @@
-image: docker:latest
+# image: docker:latest
 
+# services:
+#   - docker:dind
+
+# stages:
+#   # - setup
+#   - build
+#   - cypress-test
+#   # - cleanup
+
+# variables:
+#   DOCKER_DRIVER: overlay
+#   npm_config_cache: "$CI_PROJECT_DIR/CypressE2E/.npm"
+#   CYPRESS_CACHE_FOLDER: "$CI_PROJECT_DIR/CypressE2E/cache/Cypress"
+
+# cache:
+#   key: ${CI_COMMIT_REF_SLUG}
+#   paths:
+#     - CypressE2E/.npm
+#     - CypressE2E/cache/Cypress
+#     - CypressE2E/node_modules
+
+# # Cluster Connect:
+# #   stage: setup
+# #   tags:
+# #     - litmus-portal
+# #   script:
+# #     - chmod 755 ./build/gitlab/stages/3-cluster-connect/cluster-connect
+# #     - ./build/gitlab/stages/3-cluster-connect/cluster-connect
+# #   artifacts:
+# #     when: always
+# #     paths:
+# #       - .kube/
+
+# App Cluster Setup:
+#   stage: build
+#   # tags:
+#   #   - litmus-portal
+
+#   script: 
+#     - git clone https://github.com/litmuschaos/litmus.git
+#     - kubectl apply -f litmus/litmus-portal/k8s-manifest.yml
+#     - kubectl wait --for=condition=Ready pods --all --namespace litmus
+#     - export frontendPodName=$(kubectl get pods -l component=litmusportal-frontend --template '{{range .items}}{{.metadata.name}}{{"\n"}}{{end}}' -n litmus)
+#     - export frontendPodPort=$(kubectl get pod $frontendPodName --template='{{(index (index .spec.containers 0).ports 0).containerPort}}{{"\n"}}' --namespace litmus)
+#     - kubectl port-forward $frontendPodName -n litmus 3000:$frontendPodPort &
+
+# Cypress-e2e:
+#   when: always
+#   image: cypress/base:10
+#   stage: cypress-test
+#   # tags:
+#   #   - litmus-portal
+#   script:
+#     - cd CypressE2E && npm ci
+#     - npm test
+#   artifacts:
+#     when: always
+#     paths:
+#       - CypressE2E/cypress/screenshots
+#       - CypressE2E/cypress/videos
+#       - .kube/
+
+# # Cluster Disconnect:
+# #   when: always
+# #   stage: cleanup
+# #   tags:
+# #     - litmus-portal
+# #   script: 
+# #     - chmod 755 ./build/gitlab/stages/4-cluster-disconnect/cluster-disconnect
+# #     - ./build/gitlab/stages/4-cluster-disconnect/cluster-disconnect
+# #   artifacts:
+# #     when: always
+# #     paths:
+# #       - .kube/
+
+image: docker:stable
+variables:
+  KUBECTL: v1.17.0
+  KIND: v0.8.1
 services:
   - docker:dind
-
 stages:
-  # - setup
-  - build
-  - cypress-test
-  # - cleanup
-
-variables:
-  DOCKER_DRIVER: overlay
-  npm_config_cache: "$CI_PROJECT_DIR/CypressE2E/.npm"
-  CYPRESS_CACHE_FOLDER: "$CI_PROJECT_DIR/CypressE2E/cache/Cypress"
-
-cache:
-  key: ${CI_COMMIT_REF_SLUG}
-  paths:
-    - CypressE2E/.npm
-    - CypressE2E/cache/Cypress
-    - CypressE2E/node_modules
-
-# Cluster Connect:
-#   stage: setup
-#   tags:
-#     - litmus-portal
-#   script:
-#     - chmod 755 ./build/gitlab/stages/3-cluster-connect/cluster-connect
-#     - ./build/gitlab/stages/3-cluster-connect/cluster-connect
-#   artifacts:
-#     when: always
-#     paths:
-#       - .kube/
-
-App Cluster Setup:
-  stage: build
-  # tags:
-  #   - litmus-portal
-
-  script: 
-    - git clone https://github.com/litmuschaos/litmus.git
-    - kubectl apply -f litmus/litmus-portal/k8s-manifest.yml
-    - kubectl wait --for=condition=Ready pods --all --namespace litmus
-    - export frontendPodName=$(kubectl get pods -l component=litmusportal-frontend --template '{{range .items}}{{.metadata.name}}{{"\n"}}{{end}}' -n litmus)
-    - export frontendPodPort=$(kubectl get pod $frontendPodName --template='{{(index (index .spec.containers 0).ports 0).containerPort}}{{"\n"}}' --namespace litmus)
-    - kubectl port-forward $frontendPodName -n litmus 3000:$frontendPodPort &
-
-Cypress-e2e:
-  when: always
-  image: cypress/base:10
-  stage: cypress-test
-  # tags:
-  #   - litmus-portal
+  - test
+test:
+  stage: test
   script:
-    - cd CypressE2E && npm ci
-    - npm test
-  artifacts:
-    when: always
-    paths:
-      - CypressE2E/cypress/screenshots
-      - CypressE2E/cypress/videos
-      - .kube/
-
-# Cluster Disconnect:
-#   when: always
-#   stage: cleanup
-#   tags:
-#     - litmus-portal
-#   script: 
-#     - chmod 755 ./build/gitlab/stages/4-cluster-disconnect/cluster-disconnect
-#     - ./build/gitlab/stages/4-cluster-disconnect/cluster-disconnect
-#   artifacts:
-#     when: always
-#     paths:
-#       - .kube/
-
+    - apk add -U wget
+    - wget -O /usr/local/bin/kind https://github.com/kubernetes-sigs/kind/releases/download/${KIND}/kind-linux-amd64
+    - chmod +x /usr/local/bin/kind
+    - wget -O /usr/local/bin/kubectl https://storage.googleapis.com/kubernetes-release/release/${KUBECTL}/bin/linux/amd64/kubectl
+    - chmod +x /usr/local/bin/kubectl
+    - kind create cluster --config=./gitlab/kind-config.yaml
+    - sed -i -E -e 's/localhost|0\.0\.0\.0/docker/g' "$HOME/.kube/config"
+    - kubectl get nodes -o wide
+    - kubectl get pods --all-namespaces -o wide
+    - kubectl get services --all-namespaces -o wide
