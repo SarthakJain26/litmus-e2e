@@ -83,9 +83,9 @@ services:
   - docker:dind
 stages:
   - test
-  - cypress-test
 test:
   stage: test
+  image: cypress/base:10
   script:
     - apk add -U wget
     - wget -O /usr/local/bin/kind https://github.com/kubernetes-sigs/kind/releases/download/${KIND}/kind-linux-amd64
@@ -98,20 +98,6 @@ test:
     - export frontendPodName=$(kubectl get pods -l component=litmusportal-frontend --template '{{range .items}}{{.metadata.name}}{{"\n"}}{{end}}' -n litmus)
     - export frontendPodPort=$(kubectl get pod $frontendPodName --template='{{(index (index .spec.containers 0).ports 0).containerPort}}{{"\n"}}' --namespace litmus)
     - kubectl port-forward $frontendPodName -n litmus 3000:$frontendPodPort &
-
-Cypress-e2e:
-  when: always
-  image: cypress/base:10
-  stage: cypress-test
-  # tags:
-  #   - litmus-portal
-  script:
     - kubectl get pods -n litmus
     - cd CypressE2E && npm ci
     - npm test
-  artifacts:
-    when: always
-    paths:
-      - CypressE2E/cypress/screenshots
-      - CypressE2E/cypress/videos
-      - .kube/
