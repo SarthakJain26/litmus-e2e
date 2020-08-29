@@ -96,8 +96,7 @@ test:
     - kubectl get nodes -o wide
     - kubectl get pods --all-namespaces -o wide
     - kubectl get services --all-namespaces -o wide
-    - git clone https://github.com/litmuschaos/litmus.git
-    - kubectl apply -f litmus/litmus-portal/k8s-manifest.yml
+    - kubectl apply -f https://raw.githubusercontent.com/litmuschaos/litmus/master/litmus-portal/k8s-manifest.yml
     - kubectl wait --for=condition=Ready pods --all --namespace litmus
     - export frontendPodName=$(kubectl get pods -l component=litmusportal-frontend --template '{{range .items}}{{.metadata.name}}{{"\n"}}{{end}}' -n litmus)
     - export frontendPodPort=$(kubectl get pod $frontendPodName --template='{{(index (index .spec.containers 0).ports 0).containerPort}}{{"\n"}}' --namespace litmus)
