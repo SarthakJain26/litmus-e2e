@@ -53,8 +53,8 @@ Cypress-e2e:
   artifacts:
     when: always
     paths:
-      # - CypressE2E/cypress/screenshots
-      # - CypressE2E/cypress/videos
+      - CypressE2E/cypress/screenshots
+      - CypressE2E/cypress/videos
       - .kube/
 
 # Cluster Disconnect:
