@@ -50,8 +50,8 @@ Cypress-Setup:
   when: always
   stage: build
   image: cypress/base:10
-  # tags:
-  #   - litmus-portal
+  tags:
+    - litmus-portal
   script:
     - cd CypressE2E && npm ci
   artifacts:
@@ -63,8 +63,8 @@ Cypress-e2e:
   when: always
   stage: cypress-test
   image: cypress/base:10
-  # tags:
-  #   - litmus-portal
+  tags:
+    - litmus-portal
   script:
     - cd CypressE2E
     - npm test
