@@ -49,6 +49,7 @@ cache:
 Cypress-Setup:
   when: always
   stage: build
+  image: cypress/base:10
   script:
     - apk add npm
     - cd CypressE2E && npm ci
@@ -60,6 +61,7 @@ Cypress-Setup:
 Cypress-e2e:
   when: always
   stage: cypress-test
+  image: cypress/base:10
   # tags:
   #   - litmus-portal
   script:
