@@ -56,8 +56,8 @@ Cypress-Setup:
     - cd CypressE2E && npm ci
   artifacts:
     when: always
-    # paths:
-    #   - .kube/
+    paths:
+      - .node_modules/
 
 Cypress-e2e:
   when: always
