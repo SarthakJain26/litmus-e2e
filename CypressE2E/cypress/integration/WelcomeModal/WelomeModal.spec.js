@@ -4,11 +4,11 @@ describe("Testing the accessibility of Welcome Modal",()=>{
     before("Logging In to Litmus-Portal",()=>{
         indexedDB.deleteDatabase('localforage');
         cy.visit('/');
-        cy.loginServer(200,"Vedant","1234");
+        cy.login("admin","litmus");
     });
 
-    beforeEach("Refreshing to get welcome Modal again",()=>{
-        cy.visit('/');
+    beforeEach("Clearing local storage",()=>{
+        indexedDB.deleteDatabase('localforage');
     })
 
     it("Visiting the Welcome Modal after Login",()=>{
@@ -16,18 +16,18 @@ describe("Testing the accessibility of Welcome Modal",()=>{
         cy.log("Reached the Welcome Modal Successfully");
     });
 
-    it("Using Modal without inputting any details",()=>{
-        cy.modalServer(200,' ',' ',' ',' ');
-        cy.contains('Congratulations').should('not.be.visible');
-    });
+    // it("Using Modal without inputting any details",()=>{
+    //     cy.welcomeModalInputs(' ',' ',' ',' ');
+    //     cy.contains('Congratulations').should('not.be.visible');
+    // });
 
-    it("Using Modal by partially inputting details",()=>{
-        cy.modalServer(503,'Project','Name','Litmus@mayadata.io',' ');
-        cy.contains('Congratulations').should('not.be.visible');
-    });
+    // it("Using Modal by partially inputting details",()=>{
+    //     cy.welcomeModalInputs('Project','admin','litmus',' ');
+    //     cy.contains('Congratulations').should('not.be.visible');
+    // });
     
     it("Using Modal by inputting all details",()=>{
-        cy.modalServer(200,'Project','Name','Litmus@mayadata.io','1234');
+        cy.welcomeModalInputs('Project','admin','litmus','1234');
         cy.contains('Congratulations').should('be.visible');
     });
 })

@@ -47,7 +47,10 @@ Cypress.Commands.add('welcomeModalInputs',(ProjectName,Name,Email,Password)=>{
 
 //Custom command for Inputting Login Details.
 Cypress.Commands.add('login',(Email,Password)=>{
+    cy.server();
+    cy.route("POST","http://localhost:3000/login").as('login');
     cy.get('[name=username]').type(Email);
     cy.get('[name=password]').type(Password);
     cy.get('[data-cy=loginButton]').click();
+    cy.wait('@login');
 })

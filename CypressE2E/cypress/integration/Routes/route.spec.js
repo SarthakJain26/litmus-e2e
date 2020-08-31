@@ -4,7 +4,7 @@ describe("Testing the routes functionality without Login [ Must redirect to Logi
 
     context("Testing Routes without login",()=>{
 
-        ["workflow","homepage","community"].map((page)=>{
+        ["workflow","homepage","community","unknown"].map((page)=>{
             it("Visiting the "+page+" page without login",()=>{
                 indexedDB.deleteDatabase('localforage');
                 cy.visit("/"+page);
@@ -12,32 +12,21 @@ describe("Testing the routes functionality without Login [ Must redirect to Logi
             })
         })
     })
-
-    it("Visiting an unknown page without login",()=>{
-        indexedDB.deleteDatabase('localforage');
-        cy.visit("/hii");
-        cy.url().should("include","/login");
-    })
 })
 
-describe("Testing the routes with login",()=>{
+describe("Testing the routes with login [Must redirect to known required page or 404 for unknown page]",()=>{
     beforeEach("Login in to Web App",()=>{
         indexedDB.deleteDatabase('localforage');
         cy.visit('/');
-        cy.loginServer(200,"Vedant","1234");
+        cy.login("admin","litmus");
     });
     
     context("Testing routes functionality with login",()=>{
-        ["workflow","homepage","community"].map((page)=>{
+        ["workflow","homepage","community","Unknown"].map((page)=>{
             it("Visiting the "+page+" page after login",()=>{
                 cy.visit("/"+page);
                 cy.url().should('include','/'+page);
             })
-        })
-
-        it("Visiting an unknown page",()=>{
-            cy.visit('/hii');
-            cy.url().should('include','/404');
         })
     })
 })

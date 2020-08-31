@@ -22,28 +22,27 @@ describe("Checking functionality of Login Page",()=>{
     })
 
     it("Testing the only single input sign in [ Should not be possible ]",()=>{
-        cy.loginServer(503,"Vedant"," ");
+        cy.login("admin"," ");
         cy.url().should('include','/login');
         cy.get('[name=username]').clear();
         cy.get('[name=password]').clear();
-        cy.loginServer(503," ","1234");
+        cy.login(" ","litmus")
         cy.url().should('include','/login');
     })
 
     it("Testing with wrong details [ Should not be possible ]",()=>{
-        cy.loginServer(503,"Vedant","litmus");
+        cy.login("Vedant","1234");
         cy.url().should('include','/login');
     })
 
     it("Testing with without any details [ Should not be possible ]",()=>{
-        cy.loginServer(503," "," ");
+        cy.login(" "," ");
         cy.url().should('include','/login');
     })
 
     it("Testing with Correct details [ Must redirect to Welcome modal ]",()=>{
-        cy.loginServer(200,"Vedant","litmus");
+        cy.login("admin","litmus");
         cy.contains("Welcome to Litmus Portal");
-        indexedDB.deleteDatabase('localforage');
     })
 })
 
