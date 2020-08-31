@@ -50,6 +50,7 @@ Cypress-Setup:
   when: always
   stage: build
   script:
+    - apk add npm
     - cd CypressE2E && npm ci
   artifacts:
     when: always
@@ -62,6 +63,7 @@ Cypress-e2e:
   # tags:
   #   - litmus-portal
   script:
+    - apk add npm
     - cd CypressE2E
     - npm test
   artifacts:
