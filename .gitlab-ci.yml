@@ -39,8 +39,10 @@ App Cluster Setup:
     - export frontendPodName=$(kubectl get pods -l component=litmusportal-frontend --template '{{range .items}}{{.metadata.name}}{{"\n"}}{{end}}' -n litmus)
     - export frontendPodPort=$(kubectl get pod $frontendPodName --template='{{(index (index .spec.containers 0).ports 0).containerPort}}{{"\n"}}' --namespace litmus)
     - kubectl port-forward $frontendPodName -n litmus 3000:$frontendPodPort &
-  paths:
-    - .kube/
+  artifacts:
+    when: always
+    paths:
+      - .kube/
 
 Cypress-Setup:
   when: always
