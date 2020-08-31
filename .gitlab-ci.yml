@@ -51,7 +51,6 @@ Cypress-Setup:
   stage: build
   image: cypress/base:10
   script:
-    - apk add npm
     - cd CypressE2E && npm ci
   artifacts:
     when: always
@@ -65,7 +64,6 @@ Cypress-e2e:
   # tags:
   #   - litmus-portal
   script:
-    - apk add npm
     - cd CypressE2E
     - npm test
   artifacts:
