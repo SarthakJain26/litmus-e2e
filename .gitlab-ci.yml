@@ -1,10 +1,10 @@
 stages:
-  - setup
+  # - setup
   - app-setup
   - test-setup
   - cypress-test
   - app-cleanup
-  - cleanup
+  # - cleanup
 
 variables:
   npm_config_cache: "$CI_PROJECT_DIR/.npm"
@@ -17,17 +17,17 @@ cache:
     - cache/Cypress
     - CypressE2E/node_modules
 
-Cluster Connect:
-  stage: setup
-  tags:
-    - litmus-portal
-  script:
-    - chmod 755 ./build/gitlab/stages/1-gke-setup/cluster-setup
-    - ./build/gitlab/stages/1-gke-setup/cluster-setup
-  artifacts:
-    when: always
-    paths:
-      - .kube/
+# Cluster Connect:
+#   stage: setup
+#   tags:
+#     - litmus-portal
+#   script:
+#     - chmod 755 ./build/gitlab/stages/1-gke-setup/cluster-setup
+#     - ./build/gitlab/stages/1-gke-setup/cluster-setup
+#   artifacts:
+#     when: always
+#     paths:
+#       - .kube/
 
 App Cluster Setup:
   stage: app-setup
@@ -80,18 +80,18 @@ App-cleanup:
   script:
     - kubectl delete -f https://raw.githubusercontent.com/litmuschaos/litmus/master/litmus-portal/k8s-manifest.yml
 
-Cluster Disconnect:
-  when: always
-  stage: cleanup
-  tags:
-    - litmus-portal
-  script: 
-    - chmod 755 ./build/gitlab/stages/2-gke-cleanup/cluster-cleanup
-    - ./build/gitlab/stages/2-gke-cleanup/cluster-cleanup
-  artifacts:
-    when: always
-    paths:
-      - .kube/
+# Cluster Disconnect:
+#   when: always
+#   stage: cleanup
+#   tags:
+#     - litmus-portal
+#   script: 
+#     - chmod 755 ./build/gitlab/stages/2-gke-cleanup/cluster-cleanup
+#     - ./build/gitlab/stages/2-gke-cleanup/cluster-cleanup
+#   artifacts:
+#     when: always
+#     paths:
+#       - .kube/
 
 # image: docker:stable
 # services:
