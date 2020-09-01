@@ -55,7 +55,7 @@ Cypress-Setup:
   artifacts:
     when: always
     paths:
-      - .node_modules/
+      - node_modules/
 
 Cypress-e2e:
   when: always
