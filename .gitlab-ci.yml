@@ -1,3 +1,8 @@
+image: docker:stable
+
+services:
+  - docker:dind
+
 stages:
   # - setup
   - app-setup
@@ -9,6 +14,8 @@ stages:
 variables:
   npm_config_cache: "$CI_PROJECT_DIR/.npm"
   CYPRESS_CACHE_FOLDER: "$CI_PROJECT_DIR/cache/Cypress"
+  KUBECTL: v1.17.0
+  KIND: v0.8.1
 
 cache:
   key: ${CI_COMMIT_REF_SLUG}
@@ -31,9 +38,19 @@ cache:
 
 App Cluster Setup:
   stage: app-setup
-  tags:
-    - litmus-portal
-  script: 
+  # tags:
+  #   - litmus-portal
+  script:
+    - apk add -U wget
+    - wget -O /usr/local/bin/kind https://github.com/kubernetes-sigs/kind/releases/download/${KIND}/kind-linux-amd64
+    - chmod +x /usr/local/bin/kind
+    - wget -O /usr/local/bin/kubectl https://storage.googleapis.com/kubernetes-release/release/${KUBECTL}/bin/linux/amd64/kubectl
+    - chmod +x /usr/local/bin/kubectl
+    - kind create cluster --config=./gitlab/kind-config.yaml
+    - sed -i -E -e 's/localhost|0\.0\.0\.0/docker/g' "$HOME/.kube/config"
+    - kubectl get nodes -o wide
+    - kubectl get pods --all-namespaces -o wide
+    - kubectl get services --all-namespaces -o wide
     - kubectl apply -f https://raw.githubusercontent.com/litmuschaos/litmus/master/litmus-portal/k8s-manifest.yml
     - kubectl wait --for=condition=Ready pods --all --namespace litmus
     - export frontendPodName=$(kubectl get pods -l component=litmusportal-frontend --template '{{range .items}}{{.metadata.name}}{{"\n"}}{{end}}' -n litmus)
@@ -48,8 +65,8 @@ Cypress-Setup:
   when: always
   stage: test-setup
   image: cypress/base:10
-  tags:
-    - litmus-portal
+  # tags:
+  #   - litmus-portal
   script:
     - cd CypressE2E && npm ci
   artifacts:
@@ -61,8 +78,8 @@ Cypress-e2e:
   when: always
   stage: cypress-test
   image: cypress/base:10
-  tags:
-    - litmus-portal
+  # tags:
+  #   - litmus-portal
   script:
     - cd CypressE2E
     - npm test
@@ -75,8 +92,8 @@ Cypress-e2e:
 App-cleanup:
   when: always
   stage: app-cleanup
-  tags:
-    - litmus-portal
+  # tags:
+  #   - litmus-portal
   script:
     - kubectl delete -f https://raw.githubusercontent.com/litmuschaos/litmus/master/litmus-portal/k8s-manifest.yml
 
