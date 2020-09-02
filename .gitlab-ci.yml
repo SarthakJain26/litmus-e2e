@@ -23,8 +23,8 @@ cache:
     - .npm
     - cache/Cypress
     - CypressE2E/node_modules
-    - /usr/local/bin/kind
-    - /usr/local/bin/kubectl
+    - $PATH:~/kind
+    - $PATH:~/kubectl
 
 # Cluster Connect:
 #   stage: setup
@@ -52,20 +52,20 @@ App Cluster Setup:
     - mv ./kubectl /usr/local/bin/kubectl
     - kind create cluster --config=./gitlab/kind-config.yaml
     - sed -i -E -e 's/localhost|0\.0\.0\.0/docker/g' "$HOME/.kube/config"
-    - kubectl get nodes -o wide
-    - kubectl get pods --all-namespaces -o wide
-    - kubectl get services --all-namespaces -o wide
-    - kubectl apply -f https://raw.githubusercontent.com/litmuschaos/litmus/master/litmus-portal/k8s-manifest.yml
-    - kubectl wait --for=condition=Ready pods --all --namespace litmus --timeout=100s
-    - export frontendPodName=$(kubectl get pods -l component=litmusportal-frontend --template '{{range .items}}{{.metadata.name}}{{"\n"}}{{end}}' -n litmus)
-    - export frontendPodPort=$(kubectl get pod $frontendPodName --template='{{(index (index .spec.containers 0).ports 0).containerPort}}{{"\n"}}' --namespace litmus)
-    - kubectl port-forward $frontendPodName -n litmus 3000:$frontendPodPort &
+    # - kubectl get nodes -o wide
+    # - kubectl get pods --all-namespaces -o wide
+    # - kubectl get services --all-namespaces -o wide
+    # - kubectl apply -f https://raw.githubusercontent.com/litmuschaos/litmus/master/litmus-portal/k8s-manifest.yml
+    # - kubectl wait --for=condition=Ready pods --all --namespace litmus --timeout=100s
+    # - export frontendPodName=$(kubectl get pods -l component=litmusportal-frontend --template '{{range .items}}{{.metadata.name}}{{"\n"}}{{end}}' -n litmus)
+    # - export frontendPodPort=$(kubectl get pod $frontendPodName --template='{{(index (index .spec.containers 0).ports 0).containerPort}}{{"\n"}}' --namespace litmus)
+    # - kubectl port-forward $frontendPodName -n litmus 3000:$frontendPodPort &
   artifacts:
     when: always
     paths:
       - .kube
-      - /usr/local/bin/kind
-      - /usr/local/bin/kubectl
+      - $PATH:~/kind
+      - $PATH:~/kubectl
 
 Cypress-Setup:
   when: always
