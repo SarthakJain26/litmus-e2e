@@ -23,6 +23,8 @@ cache:
     - .npm
     - cache/Cypress
     - CypressE2E/node_modules
+    - /usr/local/bin/kind
+    - /usr/local/bin/kubectl
 
 # Cluster Connect:
 #   stage: setup
@@ -44,10 +46,10 @@ App Cluster Setup:
     - apk add -U curl
     - curl -Lo ./kind https://kind.sigs.k8s.io/dl/v0.8.1/kind-linux-amd64
     - chmod +x ./kind
-    - mv ./kind /usr/local/bin/kind
+    - mv ./kind $PATH/kind
     - curl -LO https://storage.googleapis.com/kubernetes-release/release/v1.19.0/bin/linux/amd64/kubectl
     - chmod +x ./kubectl
-    - mv ./kubectl /usr/local/bin/kubectl
+    - mv ./kubectl $PATH/kubectl
     - kind create cluster --config=./gitlab/kind-config.yaml
     - sed -i -E -e 's/localhost|0\.0\.0\.0/docker/g' "$HOME/.kube/config"
     - kubectl get nodes -o wide
@@ -61,7 +63,9 @@ App Cluster Setup:
   artifacts:
     when: always
     paths:
-      - .kube/
+      - $HOME/.kube
+      - $PATH/kind
+      - $PATH/kubectl
 
 Cypress-Setup:
   when: always
