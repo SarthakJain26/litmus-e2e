@@ -1,9 +1,7 @@
 stages:
   - setup
-  # - app-setup
   - test-setup
   - cypress-test
-  # - app-cleanup
   - cleanup
 
 variables:
