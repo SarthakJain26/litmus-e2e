@@ -1,8 +1,3 @@
-# image: docker:latest
-
-# services:
-#   - docker:dind
-
 stages:
   - setup
   # - app-setup
@@ -14,8 +9,6 @@ stages:
 variables:
   npm_config_cache: "$CI_PROJECT_DIR/.npm"
   CYPRESS_CACHE_FOLDER: "$CI_PROJECT_DIR/cache/Cypress"
-  # KUBECTL: v1.17.0
-  # KIND: v0.8.1
 
 cache:
   key: ${CI_COMMIT_REF_SLUG}
@@ -23,9 +16,7 @@ cache:
     - .npm
     - cache/Cypress
     - CypressE2E/node_modules
-    # - /root/.kube
-    # - /root/usr/local/bin/kind
-    # - /root/usr/local/bin/kubectl
+
 
 Cluster Connect:
   stage: setup
@@ -39,34 +30,7 @@ Cluster Connect:
     paths:
       - .kube/
 
-# App Cluster Setup:
-#   stage: app-setup
-#   # tags:
-#   #   - litmus-portal
-#   script:
-#     - apk add -U curl
-#     - curl -Lo ./kind https://kind.sigs.k8s.io/dl/v0.8.1/kind-linux-amd64
-#     - chmod +x ./kind
-#     - mv ./kind /usr/local/bin/kind
-#     - curl -LO https://storage.googleapis.com/kubernetes-release/release/v1.19.0/bin/linux/amd64/kubectl
-#     - chmod +x ./kubectl
-#     - mv ./kubectl /usr/local/bin/kubectl
-#     - kind create cluster --config=./gitlab/kind-config.yaml
-#     - sed -i -E -e 's/localhost|0\.0\.0\.0/docker/g' "$HOME/.kube/config"
-#     # - kubectl get nodes -o wide
-#     # - kubectl get pods --all-namespaces -o wide
-#     # - kubectl get services --all-namespaces -o wide
-#     # - kubectl apply -f https://raw.githubusercontent.com/litmuschaos/litmus/master/litmus-portal/k8s-manifest.yml
-#     # - kubectl wait --for=condition=Ready pods --all --namespace litmus --timeout=100s
-#     # - export frontendPodName=$(kubectl get pods -l component=litmusportal-frontend --template '{{range .items}}{{.metadata.name}}{{"\n"}}{{end}}' -n litmus)
-#     # - export frontendPodPort=$(kubectl get pod $frontendPodName --template='{{(index (index .spec.containers 0).ports 0).containerPort}}{{"\n"}}' --namespace litmus)
-#     # - kubectl port-forward $frontendPodName -n litmus 3000:$frontendPodPort &
-  # artifacts:
-  #   when: always
-  #   paths:
-  #     - /root/.kube
-  #     - /root/usr/local/bin/kind
-  #     - /root/usr/local/bin/kubectl
+
 
 Cypress-Setup:
   when: always
@@ -96,13 +60,6 @@ Cypress-e2e:
       - CypressE2E/cypress/screenshots
       - CypressE2E/cypress/videos
     
-# App-cleanup:
-#   when: always
-#   stage: app-cleanup
-#   # tags:
-#   #   - litmus-portal
-#   script:
-#     - kubectl delete -f https://raw.githubusercontent.com/litmuschaos/litmus/master/litmus-portal/k8s-manifest.yml
 
 Cluster Disconnect:
   when: always
@@ -116,29 +73,3 @@ Cluster Disconnect:
     when: always
     paths:
       - .kube/
-
-# image: docker:stable
-# services:
-#   - docker:dind
-# stages:
-#   - test
-# test:
-#   stage: test
-#   script:
-#     - apk add --update nodejs nodejs-npm curl
-#     - curl -LO "https://storage.googleapis.com/kubernetes-release/release/$(curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt)/bin/linux/amd64/kubectl"
-#     - chmod +x ./kubectl
-#     - mv ./kubectl /usr/local/bin/kubectl
-#     - curl -Lo ./kind https://kind.sigs.k8s.io/dl/v0.8.1/kind-linux-amd64
-#     - chmod +x ./kind
-#     - mv ./kind /usr/local/bin/kind
-#     - kind create cluster --config=./gitlab/kind-config.yaml
-#     - sed -i -E -e 's/localhost|0\.0\.0\.0/docker/g' "$HOME/.kube/config"
-#     - kubectl apply -f https://raw.githubusercontent.com/litmuschaos/litmus/master/litmus-portal/k8s-manifest.yml
-#     - kubectl wait --for=condition=Ready pods --all --namespace litmus --timeout=100s
-#     - export frontendPodName=$(kubectl get pods -l component=litmusportal-frontend --template '{{range .items}}{{.metadata.name}}{{"\n"}}{{end}}' -n litmus)
-#     - export frontendPodPort=$(kubectl get pod $frontendPodName --template='{{(index (index .spec.containers 0).ports 0).containerPort}}{{"\n"}}' --namespace litmus)
-#     - kubectl port-forward $frontendPodName -n litmus 3000:$frontendPodPort &
-#     - kubectl get pods -n litmus
-#     - cd CypressE2E && npm ci
-#     - npm test
