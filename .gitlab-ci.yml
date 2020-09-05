@@ -20,7 +20,7 @@ Cluster Connect:
   tags:
     - litmus-portal
   script:
-    - chmod 755 ./build/gitlab/stages/1-gke-setup/cluster-setup
+    - chmod +x ./build/gitlab/stages/1-gke-setup/cluster-setup
     - ./build/gitlab/stages/1-gke-setup/cluster-setup
   artifacts:
     when: always
@@ -61,7 +61,7 @@ Cluster Disconnect:
   tags:
     - litmus-portal
   script: 
-    - chmod 755 ./build/gitlab/stages/2-gke-cleanup/cluster-cleanup
+    - chmod +x ./build/gitlab/stages/2-gke-cleanup/cluster-cleanup
     - ./build/gitlab/stages/2-gke-cleanup/cluster-cleanup
   artifacts:
     when: always
