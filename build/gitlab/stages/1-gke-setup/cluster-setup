@@ -11,16 +11,16 @@ export GKEUSER=`echo $GKE_USER`
 git clone https://github.com/litmuschaos/litmus-e2e.git -b generic
 cd litmus-e2e/build/gitlab/stages/
 
-truncate -s 0 ~/logs/clusters
-truncate -s 0 ~/logs/zone
+sudo truncate -s 0 ~/logs/clusters
+sudo truncate -s 0 ~/logs/zone
 
 echo "creating cluster"
 
-ansible-playbook create-gke-cluster.yml -vv --extra-vars "project=${PROJECT_NAME}"
-mkdir $path/.kube
-cat ~/.kube/config > $path/.kube/config
-cat ~/.kube/config > $path/.kube/admin.conf
-cat ~/logs/clusters > $path/.kube/clusters
-cat ~/logs/zone > $path/.kube/zone
+sudo ansible-playbook create-gke-cluster.yml -vv --extra-vars "project=${PROJECT_NAME}"
+sudo mkdir $path/.kube
+sudo cat ~/.kube/config > $path/.kube/config
+sudo cat ~/.kube/config > $path/.kube/admin.conf
+sudo cat ~/logs/clusters > $path/.kube/clusters
+sudo cat ~/logs/zone > $path/.kube/zone
 
-kubectl get nodes
+sudo kubectl get nodes
