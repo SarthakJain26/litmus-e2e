@@ -1,8 +1,8 @@
 ---
 user: "{{ lookup('env','GKEUSER') }}"
-initial_node_count: 3 # Also used as minimum number of nodes for autoscaling 
+initial_node_count: 2 # Also used as minimum number of nodes for autoscaling 
 max_node_count: 5 # Used as maximum number of nodes for autoscaling
-machine_type: n1-standard-2
+machine_type: n1-standard-1
 disk_size_gb: 80
 image_type: Ubuntu
 project: e2e-runner

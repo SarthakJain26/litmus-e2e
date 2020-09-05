@@ -68,7 +68,7 @@
           shell: kubectl create clusterrolebinding cluster-admin-binding --clusterrole=cluster-admin --user={{user}}
           args:
             executable: /bin/bash
-          no_log: True
+          # no_log: True
 
         - name: Get Nodes
           shell: kubectl get nodes -o=custom-columns=NAME:.metadata.name --no-headers
