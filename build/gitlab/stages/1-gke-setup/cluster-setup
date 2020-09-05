@@ -19,13 +19,13 @@ echo "creating cluster"
 
 sudo ansible-playbook create-gke-cluster.yml -vv --extra-vars "project=${PROJECT_NAME}"
 sudo mkdir $path/.kube
-touch .kube/config
-touch .kube/admin.conf
-sudo chmod +x .kube/admin.conf
-sudo chmod +x .kube/config
+touch $path/.kube/config
+touch $path/.kube/admin.conf
+sudo chmod +x $path/.kube/admin.conf
+sudo chmod +x $path/.kube/config
 sudo chmod +x ~/.kube/config
-sudo cp ~/.kube/config .kube/config
-sudo cp ~/.kube/config .kube/admin.conf
+sudo cp ~/.kube/config $path/.kube/config
+sudo cp ~/.kube/config $path/.kube/admin.conf
 
 # sudo cat ~/.kube/config > $path/.kube/config
 # sudo cat ~/.kube/config > $path/.kube/admin.conf
