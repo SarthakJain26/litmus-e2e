@@ -4,10 +4,7 @@
 
   vars_files:
     - vars.yml
-  vars:
-    cluster_name:
-    test_case_name: "GKE_CREATE_CLUSTER"
-
+    
   tasks:
 
     - block:

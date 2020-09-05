@@ -1,7 +1,7 @@
 ---
 user: "{{ lookup('env','GKEUSER') }}"
-initial_node_count: 2 # Also used as minimum number of nodes for autoscaling 
-max_node_count: 5 # Used as maximum number of nodes for autoscaling
+initial_node_count: 1 # Also used as minimum number of nodes for autoscaling 
+max_node_count: 2 # Used as maximum number of nodes for autoscaling
 machine_type: n1-standard-1
 disk_size_gb: 80
 image_type: Ubuntu
@@ -11,8 +11,10 @@ ssh_key_fn: gke_ssh_key
 ssh_user: gkeuser
 zone: 
   - us-central1-a
-  - us-central1-b
-  - us-east1-b
-  - us-east1-c
-  - us-west1-a
-  - us-west1-b
+  # - us-central1-b
+  # - us-east1-b
+  # - us-east1-c
+  # - us-west1-a
+  # - us-west1-b
+cluster_name:
+test_case_name: "GKE_CREATE_CLUSTER"
