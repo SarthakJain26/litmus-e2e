@@ -41,7 +41,7 @@
         - name: create GKE cluster
           shell: > 
             gcloud container clusters create {{ cluster_name }}  --enable-autoscaling --max-nodes=5 
-            --min-nodes=3 --machine-type=n1-standard-2 --disk-size=80 --image-type=ubuntu 
+            --min-nodes=2 --machine-type=n1-standard-1 --disk-size=80 --image-type=ubuntu 
             --zone {{ set_zone }}  --project=e2e-runner  --scopes=https://www.googleapis.com/auth/cloud-platform
 
         - name: Save cluster info
