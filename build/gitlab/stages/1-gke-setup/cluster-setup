@@ -3,7 +3,7 @@ set -e
 path=$(pwd)
 echo $SDK_TOKEN > key.json
 gcloud auth activate-service-account --key-file=key.json
-gcloud config set project ${PROJECT_NAME}
+gcloud config set project ${PROJECT_ID}
 export GOOGLE_APPLICATION_CREDENTIALS="$path/key.json"
 export GCP_SERVICE_ACCOUNT_FILE="$path/key.json"
 export GKEUSER=`echo $GKE_USER`
