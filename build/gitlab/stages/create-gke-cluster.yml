@@ -22,7 +22,7 @@
           shell: yes y | ssh-keygen -t rsa -N "" -f $HOME/.ssh/{{ ssh_key_fn }} -C {{ ssh_user }}
           args:
             executable: /bin/bash
-          # no_log: True
+          no_log: True
 
         - name: Format SSH Key for GKE
           shell: sed -i '1s/^/{{ ssh_user }}:/' $HOME/.ssh/{{ ssh_key_fn }}.pub
@@ -65,7 +65,7 @@
           shell: kubectl create clusterrolebinding cluster-admin-binding --clusterrole=cluster-admin --user=Vedant
           args:
             executable: /bin/bash
-          # no_log: True
+          no_log: True
 
         - name: Get Nodes
           shell: kubectl get nodes -o=custom-columns=NAME:.metadata.name --no-headers
