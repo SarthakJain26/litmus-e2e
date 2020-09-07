@@ -11,20 +11,20 @@ export GKEUSER=`echo $GKE_USER`
 git clone https://github.com/Jonsy13/litmus-e2e.git -b NewWork
 cd litmus-e2e/build/gitlab/stages/
 
-sudo truncate -s 0 ~/logs/clusters
-sudo truncate -s 0 ~/logs/zone
+truncate -s 0 ~/logs/clusters
+truncate -s 0 ~/logs/zone
 
 echo "creating cluster"
 
 sudo ansible-playbook create-gke-cluster.yml -vv --extra-vars "project=${PROJECT_NAME}"
-sudo mkdir $path/.kube
-sudo touch $path/.kube/config
-sudo touch $path/.kube/admin.conf
-sudo chmod +x $path/.kube/admin.conf
-sudo chmod +x $path/.kube/config
-sudo chmod +x ~/.kube/config
-sudo cp ~/.kube/config $path/.kube/config
-sudo cp ~/.kube/config $path/.kube/admin.conf
+# sudo mkdir $path/.kube
+# sudo touch $path/.kube/config
+# sudo touch $path/.kube/admin.conf
+# sudo chmod +x $path/.kube/admin.conf
+# sudo chmod +x $path/.kube/config
+# sudo chmod +x ~/.kube/config
+# sudo cp ~/.kube/config $path/.kube/config
+# sudo cp ~/.kube/config $path/.kube/admin.conf
 
 # sudo cat ~/.kube/config > $path/.kube/config
 # sudo cat ~/.kube/config > $path/.kube/admin.conf
