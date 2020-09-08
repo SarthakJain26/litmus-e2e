@@ -9,8 +9,8 @@ cache:
 
 Cluster Connect:
   stage: setup
-  # tags:
-  #   - litmus-portal
+  tags:
+    - litmus-portal
   script:
     - chmod +x ./install.sh
     - sudo ./install.sh
@@ -21,8 +21,8 @@ Cluster Connect:
 
 Cluster Connect:
   stage: cleanup
-  # tags:
-  #   - litmus-portal
+  tags:
+    - litmus-portal
   script:
     - chmod +x ./uninstall.sh
     - sudo ./uninstall.sh
