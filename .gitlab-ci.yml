@@ -1,69 +1,35 @@
 stages:
   - setup
-  - test-setup
-  - cypress-test
+#   - test-setup 
+#   - clean-setup
   - cleanup
-
-variables:
-  npm_config_cache: "$CI_PROJECT_DIR/.npm"
-  CYPRESS_CACHE_FOLDER: "$CI_PROJECT_DIR/cache/Cypress"
 
 cache:
   key: ${CI_COMMIT_REF_SLUG}
-  paths:
-    - .npm
-    - cache/Cypress
-    - CypressE2E/node_modules
 
 Cluster Connect:
   stage: setup
-  tags:
-    - litmus-portal
+  # tags:
+  #   - litmus-portal
   script:
-    - chmod +x ./build/gitlab/stages/1-gke-setup/cluster-setup
-    - ./build/gitlab/stages/1-gke-setup/cluster-setup
+    - chmod +x ./install.sh
+    - sudo ./install.sh
   artifacts:
     when: always
     paths:
       - .kube/
 
-# Cypress-Setup:
-#   when: always
-#   stage: test-setup
-#   image: cypress/base:10
-#   tags:
-#     - litmus-portal
-#   script:
-#     - cd CypressE2E && npm ci
-#   artifacts:
-#     when: always
-#     paths:
-#       - CypressE2E/node_modules/
-
-# Cypress-e2e:
-#   when: always
-#   stage: cypress-test
-#   image: cypress/base:10
-#   tags:
-#     - litmus-portal
-#   script:
-#     - cd CypressE2E
-#     - npm test
-#   artifacts:
-#     when: always
-#     paths:
-#       - CypressE2E/cypress/screenshots
-#       - CypressE2E/cypress/videos
-    
-Cluster Disconnect:
-  when: always
+Cluster Connect:
   stage: cleanup
-  tags:
-    - litmus-portal
-  script: 
-    - chmod +x ./build/gitlab/stages/2-gke-cleanup/cluster-cleanup
-    - ./build/gitlab/stages/2-gke-cleanup/cluster-cleanup
+  # tags:
+  #   - litmus-portal
+  script:
+    - chmod +x ./uninstall.sh
+    - sudo ./uninstall.sh
   artifacts:
     when: always
     paths:
       - .kube/
+
+
+
