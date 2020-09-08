@@ -19,7 +19,7 @@ Cluster Connect:
     paths:
       - .kube/
 
-Cluster Connect:
+Cluster Disconnect:
   stage: cleanup
   tags:
     - litmus-portal
