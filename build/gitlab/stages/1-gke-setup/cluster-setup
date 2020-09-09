@@ -16,7 +16,7 @@ truncate -s 0 ~/logs/zone
 
 echo "creating cluster"
 
-ansible-playbook create-gke-cluster.yml -vv --extra-vars "project=${PROJECT_ID}"
+sudo ansible-playbook create-gke-cluster.yml -vv --extra-vars "project=${PROJECT_NAME}"
 
 mkdir $path/.kube
 cat ~/.kube/config > $path/.kube/config
