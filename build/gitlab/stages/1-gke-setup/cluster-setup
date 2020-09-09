@@ -20,10 +20,10 @@ sudo ansible-playbook create-gke-cluster.yml -vv --extra-vars "project=${PROJECT
 
 echo "Setting Cluster details"
 mkdir $path/.kube
-sudo cat ~/.kube/config > $path/.kube/config
-sudo cat ~/.kube/config > $path/.kube/admin.conf
-sudo cat ~/logs/clusters > $path/.kube/clusters
-sudo cat ~/logs/zone > $path/.kube/zone
+cat ~/.kube/config > $path/.kube/config
+cat ~/.kube/config > $path/.kube/admin.conf
+cat ~/logs/clusters > $path/.kube/clusters
+cat ~/logs/zone > $path/.kube/zone
 
 echo "Getting Nodes"
 kubectl get nodes
