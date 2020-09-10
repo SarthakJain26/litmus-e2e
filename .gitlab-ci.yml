@@ -35,11 +35,11 @@ Portal-Setup:
   tags: 
     - litmus-portal
   script:
-    kubectl apply -f https://raw.githubusercontent.com/litmuschaos/litmus/master/litmus-portal/k8s-manifest.yml
-    kubectl wait --for=condition=Ready pods --all --namespace litmus
-    export frontendPodName=$(kubectl get pods -l component=litmusportal-frontend --template '{{range .items}}{{.metadata.name}}{{"\n"}}{{end}}' -n litmus)
-    export frontendPodPort=$(kubectl get pod $frontendPodName --template='{{(index (index .spec.containers 0).ports 0).containerPort}}{{"\n"}}' --namespace litmus)
-    kubectl port-forward $frontendPodName -n litmus 3000:$frontendPodPort &
+    - kubectl apply -f https://raw.githubusercontent.com/litmuschaos/litmus/master/litmus-portal/k8s-manifest.yml
+    - kubectl wait --for=condition=Ready pods --all --namespace litmus
+    - export frontendPodName=$(kubectl get pods -l component=litmusportal-frontend --template '{{range .items}}{{.metadata.name}}{{"\n"}}{{end}}' -n litmus)
+    - export frontendPodPort=$(kubectl get pod $frontendPodName --template='{{(index (index .spec.containers 0).ports 0).containerPort}}{{"\n"}}' --namespace litmus)
+    - kubectl port-forward $frontendPodName -n litmus 3000:$frontendPodPort &
 
 Cypress-Setup:
   when: always
