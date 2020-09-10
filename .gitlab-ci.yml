@@ -1,7 +1,9 @@
 stages:
   - setup
+  - portal-setup
   - test-setup
   - cypress-test
+  - portal-cleanup
   - cleanup
 
 variables:
@@ -26,6 +28,18 @@ Cluster Connect:
     when: always
     paths:
       - .kube/
+
+Portal-Setup:
+  when: always
+  stage: portal-setup
+  tags: 
+    - litmus-portal
+  script:
+    kubectl apply -f https://raw.githubusercontent.com/litmuschaos/litmus/master/litmus-portal/k8s-manifest.yml
+    kubectl wait --for=condition=Ready pods --all --namespace litmus
+    export frontendPodName=$(kubectl get pods -l component=litmusportal-frontend --template '{{range .items}}{{.metadata.name}}{{"\n"}}{{end}}' -n litmus)
+    export frontendPodPort=$(kubectl get pod $frontendPodName --template='{{(index (index .spec.containers 0).ports 0).containerPort}}{{"\n"}}' --namespace litmus)
+    kubectl port-forward $frontendPodName -n litmus 3000:$frontendPodPort &
 
 Cypress-Setup:
   when: always
@@ -54,6 +68,14 @@ Cypress-e2e:
     paths:
       - CypressE2E/cypress/screenshots
       - CypressE2E/cypress/videos
+
+portal-cleanup:
+  when: always
+  stage: portal-cleanup
+  tags: 
+    - litmus-portal
+  script:
+    kubectl delete -f https://raw.githubusercontent.com/litmuschaos/litmus/master/litmus-portal/k8s-manifest.yml
     
 Cluster Disconnect:
   when: always
