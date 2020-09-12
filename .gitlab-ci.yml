@@ -29,7 +29,7 @@ cache:
 Cluster Connect:
   stage: setup
   tags:
-    - litmus-portal-docker
+    - litmus-portal
   script:
     - chmod 755 ./build/gitlab/stages/1-gke-setup/cluster-setup
     - ./build/gitlab/stages/1-gke-setup/cluster-setup
@@ -128,7 +128,7 @@ Cluster Disconnect:
   when: always
   stage: cleanup
   tags:
-    - litmus-portal-docker
+    - litmus-portal
   script: 
     - chmod 755 ./build/gitlab/stages/2-gke-cleanup/cluster-cleanup
     - ./build/gitlab/stages/2-gke-cleanup/cluster-cleanup
