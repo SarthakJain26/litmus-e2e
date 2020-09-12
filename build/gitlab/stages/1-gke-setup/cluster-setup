@@ -11,10 +11,6 @@ export GKEUSER=`echo $GKE_USER`
 git clone https://github.com/Jonsy13/litmus-e2e.git -b NewWork
 cd litmus-e2e/build/gitlab/stages/
 
-mkdir ~/logs
-touch ~/logs/clusters
-touch ~/logs/zone
-
 truncate -s 0 ~/logs/clusters
 truncate -s 0 ~/logs/zone
 
