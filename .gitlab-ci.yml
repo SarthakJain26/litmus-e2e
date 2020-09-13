@@ -42,7 +42,7 @@ Cluster Connect:
 Deploy to Staging:
   stage: appDeploy
   tags:
-    - litmus-portal
+    - litmus-portal-docker
   script:
     - kubectl run nginx --image=nginx --restart=Always
 
