@@ -25,6 +25,7 @@ cache:
     - .npm
     - cache/Cypress
     - CypressE2E/node_modules
+    - .kube
 
 Cluster Connect:
   stage: setup
@@ -41,7 +42,7 @@ Cluster Connect:
 Deploy to Staging:
   stage: appDeploy
   tags:
-    - litmus-portal-docker
+    - litmus-portal
   script:
     - kubectl run nginx --image=nginx --restart=Always
 
