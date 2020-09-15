@@ -1,18 +1,9 @@
-include:
-  - remote: 'https://raw.githubusercontent.com/mayadata-io/gitlab-remote-templates/master/templates/install-litmus-template.yml'
-  - remote: 'https://raw.githubusercontent.com/mayadata-io/gitlab-remote-templates/master/templates/node-cpu-hog-template.yml'
-  - remote: 'https://raw.githubusercontent.com/mayadata-io/gitlab-remote-templates/master/templates/uninstall-litmus-template.yml'
-
 stages:
   - setup
-  # - portal-setup
-  # - test-setup
-  # - cypress-test
-  # - portal-cleanup
-  - appDeploy
-  - chaosInfraSetup
-  - chaosInject
-  - chaosInfraCleanup
+  - portal-setup
+  - test-setup
+  - cypress-test
+  - portal-cleanup
   - cleanup
 
 variables:
@@ -25,11 +16,12 @@ cache:
     - .npm
     - cache/Cypress
     - CypressE2E/node_modules
+    - external_ip.txt
 
 Cluster Connect:
   stage: setup
   tags:
-    - litmus-portal-docker
+    - litmus-portal
   script:
     - chmod 755 ./build/gitlab/stages/1-gke-setup/cluster-setup
     - ./build/gitlab/stages/1-gke-setup/cluster-setup
@@ -38,97 +30,68 @@ Cluster Connect:
     paths:
       - .kube/
 
-Deploy to Staging:
-  stage: appDeploy
+Portal-Setup:
+  when: always
+  stage: portal-setup
+  tags: 
+    - litmus-portal
+  script:
+    - kubectl apply -f https://raw.githubusercontent.com/litmuschaos/litmus/master/litmus-portal/k8s-manifest.yml
+    - kubectl wait --for=condition=Ready pods --all --namespace litmus
+    - kubectl patch svc litmusportal-frontend-service  -p '{"spec": {"type": "LoadBalancer"}}' -n litmus
+    - export EXTERNAL_IP=$(kubectl get svc litmusportal-frontend-service -n litmus -o jsonpath="{.status.loadBalancer.ingress[0].ip}")
+    - cat <<< "$EXTERNAL_IP" > "external_ip.txt"
+    artifacts:
+    when: always
+    paths:
+      - .kube/
+
+Cypress-Setup:
+  when: always
+  stage: test-setup
+  image: cypress/base:10
   tags:
     - litmus-portal-docker
   script:
-    - kubectl run nginx --image=nginx --restart=Always
+    - cd CypressE2E && npm ci
+  artifacts:
+    when: always
+    paths:
+      - CypressE2E/node_modules/
 
-Install LitmusChaos:
-  stage: chaosInfraSetup
+Cypress-e2e:
+  when: always
+  stage: cypress-test
   tags:
     - litmus-portal-docker
-  extends: .install_litmus_template
-  before_script:
-  variables:
-    APP_NS: default
-    EXPERIMENT_IMAGE: litmuschaos/go-runner
-    EXPERIMENT_IMAGE_TAG: 1.7.0
-    
-Inject Node CPU Hog:
-  stage: chaosInject
-  tags:
+  script:
+    - cat <<< "external_ip.txt" > $EXTERNAL_IP
+    - echo $EXTERNAL_IP
+    - cd CypressE2E
+    - npm test
+  artifacts:
+    when: always
+    paths:
+      - CypressE2E/cypress/screenshots
+      - CypressE2E/cypress/videos
+
+portal-cleanup:
+  when: always
+  stage: portal-cleanup
+  tags: 
     - litmus-portal-docker
-  extends: .node_cpu_hog_template
-  before_script:
-  variables:
-    APP_NS: default
-    APP_LABEL: "run=nginx"
-    APP_KIND: deployment
-    TARGET_CONTAINER: nginx
-
-UnInstall LitmusChaos:
-  stage: chaosInfraCleanup
-  tags:
-    - litmus-portal-docker
-  extends: .uninstall_litmus_template
-  before_script:
-  variables:
-    APP_NS: default
-    EXPERIMENT_IMAGE: litmuschaos/go-runner
-    EXPERIMENT_IMAGE_TAG: 1.7.0
-
-# Portal-Setup:
-#   when: always
-#   stage: portal-setup
-#   tags: 
-#     - litmus-portal-docker
-#   script:
-#     - kubectl apply -f https://raw.githubusercontent.com/litmuschaos/litmus/master/litmus-portal/k8s-manifest.yml
-#     - kubectl wait --for=condition=Ready pods --all --namespace litmus
-#     - kubectl patch svc  -p '{"spec": {"ports": [{"port": 443,"targetPort": 443,"name": "https"},{"port": 80,"targetPort": 80,"name": "http"}],"type": "LoadBalancer"}}'
-
-# Cypress-Setup:
-#   when: always
-#   stage: test-setup
-#   image: cypress/base:10
-#   tags:
-#     - litmus-portal-docker
-#   script:
-#     - cd CypressE2E && npm ci
-#   artifacts:
-#     when: always
-#     paths:
-#       - CypressE2E/node_modules/
-
-# Cypress-e2e:
-#   when: always
-#   stage: cypress-test
-#   tags:
-#     - litmus-portal-docker
-#   script:
-#     - cd CypressE2E
-#     - npm test
-#   artifacts:
-#     when: always
-#     paths:
-#       - CypressE2E/cypress/screenshots
-#       - CypressE2E/cypress/videos
-
-# portal-cleanup:
-#   when: always
-#   stage: portal-cleanup
-#   tags: 
-#     - litmus-portal-docker
-#   script:
-#     kubectl delete -f https://raw.githubusercontent.com/litmuschaos/litmus/master/litmus-portal/k8s-manifest.yml
+  script:
+    kubectl delete -f https://raw.githubusercontent.com/litmuschaos/litmus/master/litmus-portal/k8s-manifest.yml
+  artifacts:
+    when: always
+    paths:
+      - .kube/
     
 Cluster Disconnect:
   when: always
   stage: cleanup
   tags:
-    - litmus-portal-docker
+    - litmus-portal
   script: 
     - chmod 755 ./build/gitlab/stages/2-gke-cleanup/cluster-cleanup
     - ./build/gitlab/stages/2-gke-cleanup/cluster-cleanup
