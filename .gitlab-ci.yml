@@ -62,8 +62,8 @@ Cypress-e2e:
   tags:
     - litmus-portal-docker
   script:
-    - cat <<< "external_ip.txt" > $EXTERNAL_IP
-    - echo $EXTERNAL_IP
+    - cat <<< "external_ip.txt" > $FRONTEND_IP
+    - echo $FRONTEND_IP
     - cd CypressE2E
     - npm test
   artifacts:
@@ -78,7 +78,7 @@ portal-cleanup:
   tags: 
     - litmus-portal-docker
   script:
-    kubectl delete -f https://raw.githubusercontent.com/litmuschaos/litmus/master/litmus-portal/k8s-manifest.yml
+    - kubectl delete -f https://raw.githubusercontent.com/litmuschaos/litmus/master/litmus-portal/k8s-manifest.yml
   artifacts:
     when: always
     paths:
