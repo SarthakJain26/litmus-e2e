@@ -64,8 +64,7 @@ Cypress-e2e:
   tags:
     - litmus-portal-docker
   script:
-    - 
-    - echo "$FRONTEND_IP"
+    - echo $FRONTEND_IP
     # - cd CypressE2E
     # - npm test
   artifacts:
