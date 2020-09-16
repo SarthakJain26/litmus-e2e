@@ -16,12 +16,11 @@ cache:
     - .npm
     - cache/Cypress
     - CypressE2E/node_modules
-    - CypressE2E/external_ip.txt
 
 Cluster Connect:
   stage: setup
   tags:
-    - litmus-portal
+    - litmus-portal-docker
   script:
     - chmod 755 ./build/gitlab/stages/1-gke-setup/cluster-setup
     - ./build/gitlab/stages/1-gke-setup/cluster-setup
@@ -34,7 +33,7 @@ Portal-Setup:
   when: always
   stage: portal-setup
   tags: 
-    - litmus-portal
+    - litmus-portal-docker
   script:
     - chmod 755 ./install.sh
     - ./install.sh
@@ -80,7 +79,7 @@ portal-cleanup:
   when: always
   stage: portal-cleanup
   tags: 
-    - litmus-portal
+    - litmus-portal-docker
   script:
     - kubectl delete -f https://raw.githubusercontent.com/litmuschaos/litmus/master/litmus-portal/k8s-manifest.yml
   artifacts:
@@ -92,7 +91,7 @@ Cluster Disconnect:
   when: always
   stage: cleanup
   tags:
-    - litmus-portal
+    - litmus-portal-docker
   script: 
     - chmod 755 ./build/gitlab/stages/2-gke-cleanup/cluster-cleanup
     - ./build/gitlab/stages/2-gke-cleanup/cluster-cleanup
