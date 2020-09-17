@@ -43,8 +43,6 @@ Portal-Setup:
     when: always
     paths:
       - .kube/
-    reports:
-      dotenv: Portal-Setup.env
 
 Cypress-Setup:
   when: always
@@ -84,7 +82,8 @@ portal-cleanup:
   tags: 
     - litmus-portal-2
   script:
-    - kubectl delete -f https://raw.githubusercontent.com/litmuschaos/litmus/master/litmus-portal/k8s-manifest.yml
+    - chmod 755 ./uninstall.sh
+    - ./uninstall.sh
   artifacts:
     when: always
     paths:

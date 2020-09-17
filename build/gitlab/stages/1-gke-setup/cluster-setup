@@ -18,10 +18,6 @@ touch ~/logs/zone
 truncate -s 0 ~/logs/clusters
 truncate -s 0 ~/logs/zone
 
-echo "Display gcloud version"
-
-gcloud --version
-
 echo "creating cluster"
 
 ansible-playbook create-gke-cluster.yml -vv --extra-vars "project=${PROJECT_NAME}"
