@@ -10,7 +10,8 @@ auth_kind: serviceaccount
 ssh_key_fn: gke_ssh_key
 ssh_user: gkeuser
 zone: 
-  - us-central1-a
+  - europe-west6-a
+  # - us-central1-a
   # - us-central1-b
   # - us-east1-b
   # - us-east1-c
