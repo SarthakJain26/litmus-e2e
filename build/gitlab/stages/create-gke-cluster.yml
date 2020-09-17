@@ -36,8 +36,7 @@
           with_random_choice: "{{ zone }}"
 
         - name: create GKE cluster
-          shell: > 
-            gcloud container clusters create {{ cluster_name }}  --enable-autoscaling --max-nodes=2
+          shell: gcloud container clusters create {{ cluster_name }}  --enable-autoscaling --max-nodes=2
             --min-nodes=2 --machine-type=n1-standard-1 --disk-size=80 --image-type=ubuntu 
             --zone {{ set_zone }}  --project=e2e-runner  --scopes=https://www.googleapis.com/auth/cloud-platform
 
