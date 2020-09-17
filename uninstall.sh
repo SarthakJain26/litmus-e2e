@@ -2,6 +2,7 @@ set -e
 path=$(pwd)
 
 # Setting up kubeconfig
+mkdir -p ~/.kube
 cat $path/.kube/config > ~/.kube/config
 cat $path/.kube/admin.conf > ~/.kube/config
 
