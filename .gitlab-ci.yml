@@ -18,6 +18,7 @@ cache:
     - CypressE2E/node_modules
 
 Cluster Connect:
+  image: jonsy13/runner:latest
   stage: setup
   tags:
     - litmus-portal-2
@@ -30,6 +31,7 @@ Cluster Connect:
       - .kube/
 
 Portal-Setup:
+  image: jonsy13/runner:latest
   when: always
   stage: portal-setup
   tags: 
@@ -77,6 +79,7 @@ Cypress-e2e:
 
 portal-cleanup:
   when: always
+  image: jonsy13/runner:latest
   stage: portal-cleanup
   tags: 
     - litmus-portal-2
@@ -89,6 +92,7 @@ portal-cleanup:
     
 Cluster Disconnect:
   when: always
+  image: jonsy13/runner:latest
   stage: cleanup
   tags:
     - litmus-portal-2
