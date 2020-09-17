@@ -12,7 +12,7 @@ describe("Testing the create Workflow Utility",()=>{
     it("Checking the accessibility of the Create-Workflow Page",()=>{
         cy.visit('/create-workflow');
         cy.url().should('contain','/create-workflow');
-        cy.contains('Choose the target kubernetes cluster').should('be.visible');
+        cy.contains('Choose the target Kubernetes cluster').should('be.visible');
     });
 
     it("Selecting a Cluster Installation [ Internal or External ]",()=>{

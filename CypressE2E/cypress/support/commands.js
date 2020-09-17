@@ -1,7 +1,6 @@
 /// <reference types="Cypress" />
 //This Script provides custom commands for tests.
 
-import "cypress-localstorage-commands"
 /* loginServer() command for stubbing a server 
 with /auth/login route with any status code and login details provided as argument.*/
 Cypress.Commands.add('loginServer',(loginStatus,email,password)=>{
@@ -31,26 +30,32 @@ Cypress.Commands.add('modalServer',(modalStatus,ProjectName,Name,Email,Password)
 })
 
 // Custom command for Inputting details in Welcome Modal.
-Cypress.Commands.add('welcomeModalInputs',(ProjectName,Name,Email,Password)=>{
+Cypress.Commands.add('welcomeModalInputs',(ProjectName,Name,Password,Email)=>{
     cy.get('[data-cy=InputProjectName] input').type(ProjectName);
     cy.get('[data-cy=Continue]').click();
     cy.get('[data-cy=InputName] input').type(Name)
-    cy.get('[data-cy=Button]').eq(0).click();
+    cy.get('[data-cy=startButton]').eq(0).click();
     cy.get('[data-cy=InputPassword] input').each(($div)=>{
         cy.wrap($div).type(Password);
     });
-    cy.get('[data-cy=Button]').eq(0).click();
+    cy.get('[data-cy=startButton]').eq(0).click();
     cy.get('[data-cy=InputEmail]').type(Email);
-    cy.get('[data-cy=Button]').eq(0).click();
+    cy.get('[data-cy=startButton]').eq(0).click();
 })
 
 
 //Custom command for Inputting Login Details.
-Cypress.Commands.add('login',(Email,Password)=>{
-    cy.server();
-    cy.route("POST","http://localhost:3000/login").as('login');
-    cy.get('[name=username]').type(Email);
-    cy.get('[name=password]').type(Password);
+Cypress.Commands.add('login',(Username,Password)=>{
+    cy.get('[data-cy=inputName]').type(Username);
+    cy.get('[data-cy=inputPassword]').type(Password);
     cy.get('[data-cy=loginButton]').click();
-    cy.wait('@login');
+})
+
+//Custom command to Reset The database
+Cypress.Commands.add('resetDatabase',()=>{
+    // cy.exec('chmod 755 ./Scripts/resetDB.sh');
+    // cy.exec('sudo ./Scripts/resetDB.sh');
+    cy.exec('docker exec -i mongodb bash',{failOnNonZeroExit: false});
+    cy.exec('mongo -host localhost -port 27017',{failOnNonZeroExit: false});
+    cy.exec('use litmus',{failOnNonZeroExit: false});
 })

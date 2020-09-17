@@ -6,5 +6,6 @@
     "defaultCommandTimeout": 10000,
     "env": {
         "loginUrl":"http://localhost:3000/login"
-    }
+    },
+    "chromeWebSecurity": false
 }
