@@ -1,33 +1,24 @@
-include:
-  - remote: 'https://raw.githubusercontent.com/mayadata-io/gitlab-remote-templates/master/templates/install-litmus-template.yml'
-  - remote: 'https://raw.githubusercontent.com/mayadata-io/gitlab-remote-templates/master/templates/node-cpu-hog-template.yml'
-  - remote: 'https://raw.githubusercontent.com/mayadata-io/gitlab-remote-templates/master/templates/uninstall-litmus-template.yml'
-
 stages:
   - setup
-  # - portal-setup
-  # - test-setup
-  # - cypress-test
-  # - portal-cleanup
-  - appDeploy
-  - chaosInfraSetup
-  - chaosInject
-  - chaosInfraCleanup
+  - portal-setup
+  - test-setup
+  - cypress-test
+  - portal-cleanup
   - cleanup
 
-# variables:
-#   npm_config_cache: "$CI_PROJECT_DIR/.npm"
-#   CYPRESS_CACHE_FOLDER: "$CI_PROJECT_DIR/cache/Cypress"
+variables:
+  npm_config_cache: "$CI_PROJECT_DIR/.npm"
+  CYPRESS_CACHE_FOLDER: "$CI_PROJECT_DIR/cache/Cypress"
 
-# cache:
-#   key: ${CI_COMMIT_REF_SLUG}
-#   paths:
-#     - .npm
-#     - cache/Cypress
-#     - CypressE2E/node_modules
+cache:
+  key: ${CI_COMMIT_REF_SLUG}
+  paths:
+    - .npm
+    - cache/Cypress
+    - CypressE2E/node_modules
 
 Cluster Connect:
-  # image: jonsy13/runner:latest
+  image: jonsy13/runner:latest
   stage: setup
   tags:
     - litmus-portal-2
@@ -39,98 +30,61 @@ Cluster Connect:
     paths:
       - .kube/
 
-# Portal-Setup:
-#   image: jonsy13/runner:latest
-#   when: always
-#   stage: portal-setup
-#   tags: 
-#     - litmus-portal-2
-#   script:
-#     - chmod 755 ./install.sh
-#     - ./install.sh
-#   artifacts:
-#     when: always
-#     paths:
-#       - .kube/
-
-# Cypress-Setup:
-#   when: always
-#   stage: test-setup
-#   image: cypress/base:10
-#   tags:
-#     - litmus-portal-2
-#   script:
-#     - cd CypressE2E && npm ci
-#   artifacts:
-#     when: always
-#     paths:
-#       - CypressE2E/node_modules/
-
-# Cypress-e2e:
-#   when: always
-#   stage: cypress-test
-#   tags:
-#     - litmus-portal-2
-#   script:
-#     - echo $FRONTEND_IP
-#     # - cd CypressE2E
-#     # - npm test
-#   artifacts:
-#     when: always
-#     paths:
-#       - CypressE2E/cypress/screenshots
-#       - CypressE2E/cypress/videos
-
-# portal-cleanup:
-#   when: always
-#   image: jonsy13/runner:latest
-#   stage: portal-cleanup
-#   tags: 
-#     - litmus-portal-2
-#   script:
-#     - chmod 755 ./uninstall.sh
-#     - ./uninstall.sh
-#   artifacts:
-#     when: always
-#     paths:
-#       - .kube/
-
-Deploy to Staging:
-  stage: appDeploy
+Portal-Setup:
+  image: jonsy13/runner:latest
+  when: always
+  stage: portal-setup
+  tags: 
+    - litmus-portal-2
   script:
-    - kubectl run nginx --image=nginx --restart=Always
+    - chmod 755 ./install.sh
+    - ./install.sh
+  artifacts:
+    when: always
+    paths:
+      - .kube/
 
-Install LitmusChaos:
-  stage: chaosInfraSetup
-  extends: .install_litmus_template
-  # before_script:
-  variables:
-    APP_NS: default
-    EXPERIMENT_IMAGE: litmuschaos/go-runner
-    EXPERIMENT_IMAGE_TAG: 1.7.0
-    
-Inject Node CPU Hog:
-  stage: chaosInject
-  extends: .node_cpu_hog_template
-  # before_script:
-  variables:
-    APP_NS: default
-    APP_LABEL: "run=nginx"
-    APP_KIND: deployment
-    TARGET_CONTAINER: nginx
+Cypress-Setup:
+  when: always
+  stage: test-setup
+  image: cypress/base:10
+  tags:
+    - litmus-portal-2
+  script:
+    - cd CypressE2E && npm ci
 
-UnInstall LitmusChaos:
-  stage: chaosInfraCleanup
-  extends: .uninstall_litmus_template
-  # before_script:
-  variables:
-    APP_NS: default
-    EXPERIMENT_IMAGE: litmuschaos/go-runner
-    EXPERIMENT_IMAGE_TAG: 1.7.0
+Cypress-e2e:
+  when: always
+  stage: cypress-test
+  tags:
+    - litmus-portal-2
+  script:
+    - echo $FRONTEND_IP
+    # - cd CypressE2E
+    # - npm test
+  artifacts:
+    when: always
+    paths:
+      - CypressE2E/cypress/screenshots
+      - CypressE2E/cypress/videos
+
+portal-cleanup:
+  when: always
+  image: jonsy13/runner:latest
+  stage: portal-cleanup
+  tags: 
+    - litmus-portal-2
+  script:
+    - chmod 755 ./uninstall.sh
+    - ./uninstall.sh
+  artifacts:
+    when: always
+    paths:
+      - .kube/
     
 Cluster Disconnect:
   when: always
-  # image: jonsy13/runner:latest
+  image: jonsy13/runner:latest
   stage: cleanup
   tags:
     - litmus-portal-2
