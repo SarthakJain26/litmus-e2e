@@ -3,7 +3,6 @@ set -e
 path=$(pwd)
 
 # Setting up the kubeconfig
-echo "Setting Cluster details"
 mkdir -p ~/.kube
 cat $path/.kube/config > ~/.kube/config
 cat $path/.kube/admin.conf > ~/.kube/config
@@ -13,11 +12,10 @@ kubectl apply -f https://raw.githubusercontent.com/litmuschaos/litmus/master/lit
 kubectl wait --for=condition=Ready pods --all -n litmus
 kubectl patch svc litmusportal-frontend-service -p '{"spec": {"type": "LoadBalancer"}}' -n litmus
 
-# Caching the External_IP of loadBalancer
-
-# echo "export FRONTEND_IP=$(kubectl get svc litmusportal-frontend-service -n litmus -o jsonpath="{.status.loadBalancer.ingress[0].ip}")" >> build.env
-# echo $FRONTEND_IP
-
 # Getting latest kubeconfig in cache
 cat ~/.kube/config > $path/.kube/config
 cat ~/.kube/config > $path/.kube/admin.conf
+
+# Caching the External_IP of loadBalancer in Environment Variable for Testing
+export FRONTEND_IP=$(kubectl get svc litmusportal-frontend-service -n litmus -o jsonpath="{.status.loadBalancer.ingress[0].ip}")
+echo $FRONTEND_IP
