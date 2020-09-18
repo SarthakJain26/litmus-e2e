@@ -68,7 +68,7 @@ Cypress-e2e:
   script:
     - echo "$ip"
     - cd CypressE2E
-    - CYPRESS_BASE_URL=http://${ip}:9091/ npm test
+    - CYPRESS_BASE_URL=http://($ip):9091/ npm test
   artifacts:
     when: always
     paths:
