@@ -26,7 +26,6 @@ build:
   script:
     - chmod 755 ./url.sh
     - ./url.sh                            
-    - echo "IP_VERSION=$link" >> build.env    
   artifacts:
     reports:
       dotenv: build.env                                 
