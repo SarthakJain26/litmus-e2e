@@ -58,8 +58,8 @@ Cypress-Setup:
     - litmus-portal-2
   script:
     - cd CypressE2E && npm ci
-  dependencies:
-    - Portal-Setup
+  # dependencies:
+  #   - Portal-Setup
 
 Cypress-e2e:
   when: always
@@ -76,8 +76,8 @@ Cypress-e2e:
     paths:
       - CypressE2E/cypress/screenshots
       - CypressE2E/cypress/videos
-  dependencies:
-    - Portal-Setup
+  # dependencies:
+  #   - Portal-Setup
   cache: {}
 
 # portal-cleanup:
