@@ -64,6 +64,7 @@ Cypress-Setup:
 Cypress-e2e:
   when: always
   stage: cypress-test
+  image: cypress/base:10
   tags:
     - litmus-portal-2
   script:
