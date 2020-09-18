@@ -41,6 +41,7 @@ Portal-Setup:
     - chmod 755 ./install.sh
     - ./install.sh
     - echo "ip=$FRONTEND_IP" >> Portal-Setup.env
+    - echo "$ip"
   artifacts:
     when: always
     paths:
@@ -66,7 +67,7 @@ Cypress-e2e:
   tags:
     - litmus-portal-2
   script:
-    - echo $ip
+    - echo "$ip"
     # - cd CypressE2E
     # - npm test 
   artifacts:
