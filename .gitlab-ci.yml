@@ -60,6 +60,10 @@ Cypress-Setup:
     - cd CypressE2E && npm ci
   # dependencies:
   #   - Portal-Setup
+  artifacts:
+    paths:
+      - CypressE2E/node_modules
+      - cache/Cypress
 
 Cypress-e2e:
   when: always
