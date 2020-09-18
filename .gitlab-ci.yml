@@ -21,6 +21,8 @@ stages:
 
 build:
   stage: build
+  tags:
+    - litmus-portal-2
   script:
     - BUILD_VERSION="Hiiiiii"                            
     - echo "BUILD_VERSION=$BUILD_VERSION" >> build.env    
@@ -30,6 +32,8 @@ build:
 
 deploy:
   stage: test
+  tags:
+    - litmus-portal-2
   script:
     - echo "Build version is ${BUILD_VERSION}"            
   dependencies:
