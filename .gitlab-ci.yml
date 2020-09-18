@@ -39,9 +39,8 @@ Portal-Setup:
     - litmus-portal-2
   script:
     - chmod 755 ./install.sh
-    - chmod 755 ./url.sh
     - ./install.sh
-    - echo "ip=$(./url.sh)" >> Portal-Setup.env
+    - echo "ip=$FRONTEND_IP" >> Portal-Setup.env
   artifacts:
     when: always
     paths:
