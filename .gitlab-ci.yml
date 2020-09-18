@@ -29,6 +29,7 @@ Cluster Connect:
     when: always
     paths:
       - .kube/
+  cache: {}
 
 Portal-Setup:
   image: jonsy13/runner:latest
@@ -43,6 +44,7 @@ Portal-Setup:
     when: always
     paths:
       - .kube/
+  cache: {}
 
 Cypress-Setup:
   when: always
@@ -67,6 +69,7 @@ Cypress-e2e:
     paths:
       - CypressE2E/cypress/screenshots
       - CypressE2E/cypress/videos
+  cache: {}
 
 portal-cleanup:
   when: always
@@ -81,6 +84,7 @@ portal-cleanup:
     when: always
     paths:
       - .kube/
+  cache: {}
     
 Cluster Disconnect:
   when: always
@@ -95,3 +99,4 @@ Cluster Disconnect:
     when: always
     paths:
       - .kube/
+  cache: {}
