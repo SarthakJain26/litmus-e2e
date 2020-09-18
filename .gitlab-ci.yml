@@ -46,7 +46,7 @@ Portal-Setup:
       - .kube/
     reports:
       dotenv: Portal-Setup.env
-  cache: {}
+  # cache: {}
 
 Cypress-Setup:
   when: always
@@ -64,7 +64,7 @@ Cypress-e2e:
   tags:
     - litmus-portal-2
   script:
-    - echo "$ip"
+    - echo ${FRONTEND_IP}
     - cd CypressE2E
     - CYPRESS_BASE_URL=http://${FRONTEND_IP}:9091/ npm test
   artifacts:
