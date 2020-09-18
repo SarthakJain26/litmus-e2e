@@ -1,10 +1,10 @@
 stages:
-  # - setup
-  # - portal-setup
+  - setup
+  - portal-setup
   - test-setup
   - cypress-test
-  # - portal-cleanup
-  # - cleanup
+  - portal-cleanup
+  - cleanup
 
 variables:
   npm_config_cache: "$CI_PROJECT_DIR/.npm"
@@ -17,38 +17,38 @@ cache:
     - cache/Cypress
     - CypressE2E/node_modules
 
-# Cluster Connect:
-#   image: jonsy13/runner:latest
-#   stage: setup
-#   tags:
-#     - litmus-portal-2
-#   script:
-#     - chmod 755 ./build/gitlab/stages/1-gke-setup/cluster-setup
-#     - ./build/gitlab/stages/1-gke-setup/cluster-setup
-#   artifacts:
-#     when: always
-#     paths:
-#       - .kube/
-#   cache: {}
+Cluster Connect:
+  image: jonsy13/runner:latest
+  stage: setup
+  tags:
+    - litmus-portal-2
+  script:
+    - chmod 755 ./build/gitlab/stages/1-gke-setup/cluster-setup
+    - ./build/gitlab/stages/1-gke-setup/cluster-setup
+  artifacts:
+    when: always
+    paths:
+      - .kube/
+  cache: {}
 
-# Portal-Setup:
-#   image: jonsy13/runner:latest
-#   when: always
-#   stage: portal-setup
-#   tags: 
-#     - litmus-portal-2
-#   script:
-#     - chmod 755 ./install.sh
-#     - ./install.sh
-#     - echo "ip=$FRONTEND_IP" >> Portal-Setup.env
-#     - echo "$ip"
-#   artifacts:
-#     when: always
-#     paths:
-#       - .kube/
-#     reports:
-#       dotenv: Portal-Setup.env
-#   cache: {}
+Portal-Setup:
+  image: jonsy13/runner:latest
+  when: always
+  stage: portal-setup
+  tags: 
+    - litmus-portal-2
+  script:
+    - chmod 755 ./install.sh
+    - ./install.sh
+    - echo "ip=$FRONTEND_IP" >> Portal-Setup.env
+    - echo "$ip"
+  artifacts:
+    when: always
+    paths:
+      - .kube/
+    reports:
+      dotenv: Portal-Setup.env
+  cache: {}
 
 Cypress-Setup:
   when: always
@@ -58,11 +58,6 @@ Cypress-Setup:
     - litmus-portal-2
   script:
     - cd CypressE2E && npm ci
-    # show where the Cypress test runner binaries are cached
-    - $(npm bin)/cypress cache path
-    # show all installed versions of Cypress binary
-    - $(npm bin)/cypress cache list
-    - $(npm bin)/cypress verify
 
 Cypress-e2e:
   when: always
@@ -73,42 +68,41 @@ Cypress-e2e:
   script:
     - echo "$ip"
     - cd CypressE2E
-    - npm test
+    - CYPRESS_BASE_URL=${ip}:9091 npm test
   artifacts:
     when: always
     paths:
       - CypressE2E/cypress/screenshots
       - CypressE2E/cypress/videos
-  # dependencies:
-  #   - Portal-Setup
-  # cache: {}
+  dependencies:
+    - Portal-Setup
 
-# portal-cleanup:
-#   when: always
-#   image: jonsy13/runner:latest
-#   stage: portal-cleanup
-#   tags: 
-#     - litmus-portal-2
-#   script:
-#     - chmod 755 ./uninstall.sh
-#     - ./uninstall.sh
-#   artifacts:
-#     when: always
-#     paths:
-#       - .kube/
-#   cache: {}
+portal-cleanup:
+  when: always
+  image: jonsy13/runner:latest
+  stage: portal-cleanup
+  tags: 
+    - litmus-portal-2
+  script:
+    - chmod 755 ./uninstall.sh
+    - ./uninstall.sh
+  artifacts:
+    when: always
+    paths:
+      - .kube/
+  cache: {}
     
-# Cluster Disconnect:
-#   when: always
-#   image: jonsy13/runner:latest
-#   stage: cleanup
-#   tags:
-#     - litmus-portal-2
-#   script: 
-#     - chmod 755 ./build/gitlab/stages/2-gke-cleanup/cluster-cleanup
-#     - ./build/gitlab/stages/2-gke-cleanup/cluster-cleanup
-#   artifacts:
-#     when: always
-#     paths:
-#       - .kube/
-#   cache: {}
+Cluster Disconnect:
+  when: always
+  image: jonsy13/runner:latest
+  stage: cleanup
+  tags:
+    - litmus-portal-2
+  script: 
+    - chmod 755 ./build/gitlab/stages/2-gke-cleanup/cluster-cleanup
+    - ./build/gitlab/stages/2-gke-cleanup/cluster-cleanup
+  artifacts:
+    when: always
+    paths:
+      - .kube/
+  cache: {}
