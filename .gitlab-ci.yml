@@ -24,8 +24,9 @@ build:
   tags:
     - litmus-portal-2
   script:
-    - BUILD_VERSION="Hiiiiii"                            
-    - echo "IP_VERSION=$BUILD_VERSION" >> build.env    
+    - chmod 755 ./url.sh
+    - ./url.sh                            
+    - echo "IP_VERSION=$link" >> build.env    
   artifacts:
     reports:
       dotenv: build.env                                 
