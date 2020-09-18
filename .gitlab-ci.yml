@@ -58,12 +58,11 @@ Cypress-Setup:
     - litmus-portal-2
   script:
     - cd CypressE2E && npm ci
-  # dependencies:
-  #   - Portal-Setup
-  artifacts:
-    paths:
-      - CypressE2E/node_modules
-      - cache/Cypress
+    # show where the Cypress test runner binaries are cached
+    - $(npm bin)/cypress cache path
+    # show all installed versions of Cypress binary
+    - $(npm bin)/cypress cache list
+    - $(npm bin)/cypress verify
 
 Cypress-e2e:
   when: always
