@@ -29,7 +29,7 @@ build:
       dotenv: build.env                                 
 
 deploy:
-  stage: deploy
+  stage: test
   script:
     - echo "Build version is ${BUILD_VERSION}"            
   dependencies:
