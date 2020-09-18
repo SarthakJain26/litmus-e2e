@@ -39,7 +39,9 @@ Portal-Setup:
     - litmus-portal-2
   script:
     - chmod 755 ./install.sh
-    - echo "ip=$(./install.sh)" >> Portal-Setup.env
+    - chmod 755 ./url.sh
+    - ./install.sh
+    - echo "ip=$(./url.sh)" >> Portal-Setup.env
   artifacts:
     when: always
     paths:
@@ -48,16 +50,16 @@ Portal-Setup:
       dotenv: Portal-Setup.env
   cache: {}
 
-Cypress-Setup:
-  when: always
-  stage: test-setup
-  image: cypress/base:10
-  tags:
-    - litmus-portal-2
-  script:
-    - cd CypressE2E && npm ci
-  dependencies:
-    - Portal-Setup
+# Cypress-Setup:
+#   when: always
+#   stage: test-setup
+#   image: cypress/base:10
+#   tags:
+#     - litmus-portal-2
+#   script:
+#     - cd CypressE2E && npm ci
+#   dependencies:
+#     - Portal-Setup
 
 Cypress-e2e:
   when: always
