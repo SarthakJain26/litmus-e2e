@@ -74,7 +74,6 @@ Cypress-e2e:
       - CypressE2E/cypress/videos
   dependencies:
     - Portal-Setup
-  cache: {}
 
 portal-cleanup:
   when: always
