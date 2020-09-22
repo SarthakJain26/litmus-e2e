@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "Basic_Setup": "cypress run --config testFiles='Basic_Setup/**/*.spec.js'",
-    "Parallel_Tests": "Cypress run --config testFiles='Parallel_Tests/**/*.spec.js'"
+    "Parallel_Tests": "cypress run --config testFiles='Parallel_Tests/**/*.spec.js'"
   },
   "keywords": [
     "Testing",
