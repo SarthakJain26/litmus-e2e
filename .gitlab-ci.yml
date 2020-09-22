@@ -57,8 +57,6 @@ Cypress-Setup:
     - litmus-portal-2
   script:
     - cd CypressE2E && npm ci
-  dependencies:
-    - Portal-Setup
 
 PreTest-Setup:
   when: always
