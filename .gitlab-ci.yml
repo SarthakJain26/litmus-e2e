@@ -56,6 +56,9 @@ Cypress-Setup:
     - litmus-portal-2
   script:
     - cd CypressE2E && npm ci
+    - CYPRESS_BASE_URL=http://${FRONTEND_IP}:9091/ npm run Basic_Setup
+  dependencies:
+    - Portal-Setup
 
 Cypress-e2e:
   when: always
@@ -66,12 +69,11 @@ Cypress-e2e:
   script:
     - echo ${FRONTEND_IP}
     - cd CypressE2E
-    - CYPRESS_BASE_URL=http://${FRONTEND_IP}:9091/ npm test
+    - CYPRESS_BASE_URL=http://${FRONTEND_IP}:9091/ npm run Parallel_Tests
   artifacts:
     when: always
     paths:
       - CypressE2E/cypress/screenshots
-      - CypressE2E/cypress/videos
   dependencies:
     - Portal-Setup
 

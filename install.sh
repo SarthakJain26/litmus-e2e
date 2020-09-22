@@ -31,6 +31,4 @@ done;
 echo "End point is ready-" && echo $external_ip; 
 
 # Caching the External_IP of loadBalancer in Environment Variable for Testing
-# FRONTEND_IP=$(kubectl get svc litmusportal-frontend-service -n litmus -o jsonpath="{.status.loadBalancer.ingress[0].ip}")
-# echo $FRONTEND_IP
 echo "FRONTEND_IP=$external_ip" >> Portal-Setup.env
