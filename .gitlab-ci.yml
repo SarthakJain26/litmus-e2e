@@ -49,19 +49,27 @@ Portal-Setup:
       dotenv: Portal-Setup.env
   cache: {}
 
-Cypress-Setup:
-  when: always
-  stage: test-setup
-  image: cypress/included:5.2.0
-  tags:
-    - litmus-portal-2
-  script:
-    - cd CypressE2E && npm ci
+# Cypress-Setup:
+#   when: always
+#   stage: test-setup
+#   image:
+#     name: cypress/included:3.8.3
+#     # cypress/included images have entrypoint set to "cypress"
+#     # which conflicts with GitLab CI wrapper shell script
+#     entrypoint: [""]
+#   tags:
+#     - litmus-portal-2
+#   script:
+#     - cd CypressE2E && npm ci
 
 PreTest-Setup:
   when: always
   stage: pre-test-setup
-  image: cypress/included:5.2.0
+  image:
+    name: cypress/included:3.8.3
+    # cypress/included images have entrypoint set to "cypress"
+    # which conflicts with GitLab CI wrapper shell script
+    entrypoint: [""]
   tags:
     - litmus-portal-2
   script:
@@ -77,7 +85,11 @@ PreTest-Setup:
 .cypress-e2e:
   when: always
   stage: cypress-test
-  image: cypress/included:5.2.0
+  image:
+    name: cypress/included:3.8.3
+    # cypress/included images have entrypoint set to "cypress"
+    # which conflicts with GitLab CI wrapper shell script
+    entrypoint: [""]
   tags:
     - litmus-portal-2
   script:
