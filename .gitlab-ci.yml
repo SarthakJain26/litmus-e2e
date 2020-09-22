@@ -92,17 +92,17 @@ PreTest-Setup:
 routes-check:
   extends: .cypress-e2e
   script:
-    - cd CypressE2E && CYPRESS_BASE_URL=http://${FRONTEND_IP}:9091/ npm run Parallel_Tests --config testFiles='Parallel_Tests/Routes/*.spec.js'
+    - cd CypressE2E && CYPRESS_BASE_URL=http://${FRONTEND_IP}:9091/ npm run Routes_Test
 
 create-workflow:
   extends: .cypress-e2e
   script: 
-    - cd CypressE2E && CYPRESS_BASE_URL=http://${FRONTEND_IP}:9091/ npm run Parallel_Tests --config testFiles='Parallel_Tests/Create_Workflow/*.spec.js'
+    - cd CypressE2E && CYPRESS_BASE_URL=http://${FRONTEND_IP}:9091/ npm run Create_Test
 
 community-data:
   extends: .cypress-e2e
   script: 
-    - cd CypressE2E && CYPRESS_BASE_URL=http://${FRONTEND_IP}:9091/ npm run Parallel_Tests --config testFiles='Parallel_Tests/Community/*.spec.js'
+    - cd CypressE2E && CYPRESS_BASE_URL=http://${FRONTEND_IP}:9091/ npm run Community_Test
 
 portal-cleanup:
   when: always
