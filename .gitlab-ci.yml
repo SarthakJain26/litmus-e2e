@@ -74,7 +74,7 @@ PreTest-Setup:
   dependencies:
     - Portal-Setup
 
-Cypress-e2e:
+.cypress-e2e:
   when: always
   stage: cypress-test
   image: cypress/base:10
@@ -82,14 +82,27 @@ Cypress-e2e:
     - litmus-portal-2
   script:
     - echo ${FRONTEND_IP}
-    - cd CypressE2E
-    - CYPRESS_BASE_URL=http://${FRONTEND_IP}:9091/ npm run Parallel_Tests
   artifacts:
     when: always
     paths:
       - CypressE2E/cypress/screenshots
   dependencies:
     - Portal-Setup
+
+routes-check:
+  extends: .cypress-e2e
+  script:
+    - cd CypressE2E && CYPRESS_BASE_URL=http://${FRONTEND_IP}:9091/ npm run Parallel_Tests --config testFiles='Parallel_Tests/Routes/*.spec.js'
+
+create-workflow:
+  extends: .cypress-e2e
+  script: 
+    - cd CypressE2E && CYPRESS_BASE_URL=http://${FRONTEND_IP}:9091/ npm run Parallel_Tests --config testFiles='Parallel_Tests/Create_Workflow/*.spec.js'
+
+community-data:
+  extends: .cypress-e2e
+  script: 
+    - cd CypressE2E && CYPRESS_BASE_URL=http://${FRONTEND_IP}:9091/ npm run Parallel_Tests --config testFiles='Parallel_Tests/Community/*.spec.js'
 
 portal-cleanup:
   when: always

@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "Basic_Setup": "cypress run --config testFiles='Basic_Setup/**/*.spec.js'",
-    "Parallel_Tests": "cypress run --config testFiles='Parallel_Tests/**/*.spec.js' --record --key 4be79026-c2c9-4e60-a3f3-2125cf3c3fc4 --parallel"
+    "Parallel_Tests": "cypress run -record --key 4be79026-c2c9-4e60-a3f3-2125cf3c3fc4 --parallel"
   },
   "keywords": [
     "Testing",
