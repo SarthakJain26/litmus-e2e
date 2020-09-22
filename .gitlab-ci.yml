@@ -52,7 +52,7 @@ Portal-Setup:
 Cypress-Setup:
   when: always
   stage: test-setup
-  image: cypress/base:10
+  image: cypress/included:5.2.0
   tags:
     - litmus-portal-2
   script:
@@ -61,7 +61,7 @@ Cypress-Setup:
 PreTest-Setup:
   when: always
   stage: pre-test-setup
-  image: cypress/base:10
+  image: cypress/included:5.2.0
   tags:
     - litmus-portal-2
   script:
@@ -73,12 +73,11 @@ PreTest-Setup:
       - CypressE2E/cypress/screenshots
   dependencies:
     - Portal-Setup
-  cache: {}
 
 .cypress-e2e:
   when: always
   stage: cypress-test
-  image: cypress/base:10
+  image: cypress/included:5.2.0
   tags:
     - litmus-portal-2
   script:
@@ -89,7 +88,6 @@ PreTest-Setup:
       - CypressE2E/cypress/screenshots
   dependencies:
     - Portal-Setup
-  cache: {}
 
 routes-check:
   extends: .cypress-e2e
