@@ -5,7 +5,9 @@
   "main": "index.js",
   "scripts": {
     "Basic_Setup": "cypress run --config testFiles='Basic_Setup/**/*.spec.js'",
-    "Parallel_Tests": "cypress run"
+    "Community_Test": "cypress run --spec 'cypress/integration/Parallel_Tests/Community/*.spec.js'",
+    "Routes_Test": "cypress run --spec 'cypress/integration/Parallel_Tests/Routes/*.spec.js'",
+    "Create_Test": "cypress run --spec 'cypress/integration/Parallel_Tests/Create_Workflow/*.spec.js'"
   },
   "keywords": [
     "Testing",
