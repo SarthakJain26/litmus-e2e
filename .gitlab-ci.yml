@@ -2,6 +2,7 @@ stages:
   - setup
   - portal-setup
   - test-setup
+  - pre-test-setup
   - cypress-test
   - portal-cleanup
   - cleanup
@@ -56,7 +57,22 @@ Cypress-Setup:
     - litmus-portal-2
   script:
     - cd CypressE2E && npm ci
+  dependencies:
+    - Portal-Setup
+
+PreTest-Setup:
+  when: always
+  stage: pre-test-setup
+  image: cypress/base:10
+  tags:
+    - litmus-portal-2
+  script:
+    - cd CypressE2E
     - CYPRESS_BASE_URL=http://${FRONTEND_IP}:9091/ npm run Basic_Setup
+  artifacts:
+    when: always
+    paths:
+      - CypressE2E/cypress/screenshots
   dependencies:
     - Portal-Setup
 
