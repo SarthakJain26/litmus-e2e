@@ -4,8 +4,8 @@
   "description": "Package for Testing",
   "main": "index.js",
   "scripts": {
-    "Basic_Setup": "cypress run --config integrationFolder=integration/Basic_Setup",
-    "Parallel_Tests": "Cypress run --config integrationFolder=integration/Parallel_Tests"
+    "Basic_Setup": "cypress run --config testFiles='Basic_Setup/**/*.spec.js'",
+    "Parallel_Tests": "Cypress run --config testFiles='Parallel_Tests/**/*.spec.js'"
   },
   "keywords": [
     "Testing",
