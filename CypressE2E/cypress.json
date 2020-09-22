@@ -1,10 +1,11 @@
 {
-  "baseUrl": "http://localhost:3000",
+  "baseUrl": "http://localhost:3001",
   "experimentalFetchPolyfill": true,
   "viewportWidth": 1800,
   "viewportHeight": 1200,
   "defaultCommandTimeout": 10000,
   "chromeWebSecurity": false,
   "video": false,
-  "projectId": "6p4c8o"
+  "projectId": "6p4c8o",
+  "experimentalNetworkStubbing":true
 }

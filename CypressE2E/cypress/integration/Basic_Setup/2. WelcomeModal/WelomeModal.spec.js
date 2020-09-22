@@ -6,7 +6,6 @@ describe("Testing the accessibility of Welcome Modal",()=>{
         indexedDB.deleteDatabase('localforage');
         cy.visit('/');
         cy.login("admin","litmus");
-        indexedDB.deleteDatabase('localforage');
     })
 
     it("Visiting the Welcome Modal after Login",()=>{

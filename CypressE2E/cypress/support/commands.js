@@ -43,7 +43,6 @@ Cypress.Commands.add('welcomeModalInputs',(ProjectName,Name,Password,Email)=>{
     cy.get('[data-cy=startButton]').eq(0).click();
 })
 
-
 //Custom command for Inputting Login Details.
 Cypress.Commands.add('login',(Username,Password)=>{
     cy.get('[data-cy=inputName] input').type(Username);

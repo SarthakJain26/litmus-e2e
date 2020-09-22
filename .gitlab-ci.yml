@@ -73,6 +73,7 @@ PreTest-Setup:
       - CypressE2E/cypress/screenshots
   dependencies:
     - Portal-Setup
+  cache: {}
 
 .cypress-e2e:
   when: always
@@ -88,6 +89,7 @@ PreTest-Setup:
       - CypressE2E/cypress/screenshots
   dependencies:
     - Portal-Setup
+  cache: {}
 
 routes-check:
   extends: .cypress-e2e
