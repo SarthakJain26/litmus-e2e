@@ -73,13 +73,14 @@ PreTest-Setup:
   tags:
     - litmus-portal-2
   script:
-    - CYPRESS_BASE_URL=http://${FRONTEND_IP}:9091/ cypress run --project ./CypressE2E
+    # - CYPRESS_BASE_URL=http://${FRONTEND_IP}:9091/ cypress run --project ./CypressE2E
+    - cypress run --project ./CypressE2E
   artifacts:
     when: always
     paths:
       - CypressE2E/cypress/screenshots
-  dependencies:
-    - Portal-Setup
+  # dependencies:
+  #   - Portal-Setup
 
 # .cypress-e2e:
 #   when: always
