@@ -9,3 +9,6 @@ import './commands'
 //     return false
 // })
 
+Cypress.Cookies.defaults({
+    preserve: 'token'
+});
