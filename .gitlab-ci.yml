@@ -7,16 +7,9 @@ stages:
   - portal-cleanup
   - cleanup
 
-# variables:
-#   npm_config_cache: "$CI_PROJECT_DIR/.npm"
-#   CYPRESS_CACHE_FOLDER: "$CI_PROJECT_DIR/cache/Cypress"
 
 cache:
   key: ${CI_COMMIT_REF_SLUG}
-  # paths:
-  #   - .npm
-  #   - cache/Cypress
-  #   - CypressE2E/node_modules
 
 Cluster Connect:
   image: jonsy13/runner:latest
@@ -71,7 +64,8 @@ PreTest-Setup:
   tags:
     - litmus-portal-2
   script:
-    - CYPRESS_BASE_URL=http://${FRONTEND_IP}:9091/ cypress run --project ./CypressE2E
+    - echo ${FRONTEND_IP}
+    - CYPRESS_BASE_URL=http://${FRONTEND_IP}:9091/ cypress run --project ./CypressE2E --config testFiles='Basic_Setup/**/*.spec.js'
   artifacts:
     when: always
     paths:
@@ -79,39 +73,39 @@ PreTest-Setup:
   dependencies:
     - Portal-Setup
 
-# .cypress-e2e:
-#   when: always
-#   stage: cypress-test
-#   image:
-#     name: cypress/included:3.8.3
-#     # cypress/included images have entrypoint set to "cypress"
-#     # which conflicts with GitLab CI wrapper shell script
-#     entrypoint: [""]
-#   tags:
-#     - litmus-portal-2
-#   script:
-#     - echo ${FRONTEND_IP}
-#   artifacts:
-#     when: always
-#     paths:
-#       - CypressE2E/cypress/screenshots
-#   dependencies:
-#     - Portal-Setup
+.cypress-e2e:
+  when: always
+  stage: cypress-test
+  image:
+    name: cypress/included:3.8.3
+    # cypress/included images have entrypoint set to "cypress"
+    # which conflicts with GitLab CI wrapper shell script
+    entrypoint: [""]
+  tags:
+    - litmus-portal-2
+  script:
+    - echo ${FRONTEND_IP}
+  artifacts:
+    when: always
+    paths:
+      - CypressE2E/cypress/screenshots
+  dependencies:
+    - Portal-Setup
 
-# routes-check:
-#   extends: .cypress-e2e
-#   script:
-#     - cd CypressE2E && CYPRESS_BASE_URL=http://${FRONTEND_IP}:9091/ npm run Routes_Test
+routes-check:
+  extends: .cypress-e2e
+  script:
+    - CYPRESS_BASE_URL=http://${FRONTEND_IP}:9091/ cypress run --project ./CypressE2E --spec 'cypress/integration/Parallel_Tests/Routes/*.spec.js'
 
-# create-workflow:
-#   extends: .cypress-e2e
-#   script: 
-#     - cd CypressE2E && CYPRESS_BASE_URL=http://${FRONTEND_IP}:9091/ npm run Create_Test
+create-workflow:
+  extends: .cypress-e2e
+  script: 
+    - CYPRESS_BASE_URL=http://${FRONTEND_IP}:9091/ cypress run --project ./CypressE2E --spec 'cypress/integration/Parallel_Tests/Create_Workflow/*.spec.js'
 
-# community-data:
-#   extends: .cypress-e2e
-#   script: 
-#     - cd CypressE2E && CYPRESS_BASE_URL=http://${FRONTEND_IP}:9091/ npm run Community_Test
+community-data:
+  extends: .cypress-e2e
+  script: 
+    - CYPRESS_BASE_URL=http://${FRONTEND_IP}:9091/ cypress run --project ./CypressE2E --spec 'cypress/integration/Parallel_Tests/Community/*.spec.js'
 
 portal-cleanup:
   when: always
