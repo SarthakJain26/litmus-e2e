@@ -76,7 +76,24 @@ Cypress-Setup:
 #   dependencies:
 #     - Portal-Setup
 
-.cypress-e2e:
+# .cypress-e2e:
+#   when: always
+#   stage: cypress-test
+#   image:
+#     name: cypress/base:10
+#   tags:
+#     - litmus-portal-2
+#   script:
+#     - echo ${FRONTEND_IP}
+#     - cd CypressE2E && CYPRESS_BASE_URL=http://${FRONTEND_IP}:9091/ npm run Create_Test
+#   artifacts:
+#     when: always
+#     paths:
+#       - CypressE2E/cypress/screenshots
+#   dependencies:
+#     - Portal-Setup
+
+cypress-e2e:
   when: always
   stage: cypress-test
   image:
@@ -93,7 +110,7 @@ Cypress-Setup:
   dependencies:
     - Portal-Setup
 
-.cypress-e2e-2:
+cypress-e2e-2:
   when: always
   stage: cypress-test
   image:
