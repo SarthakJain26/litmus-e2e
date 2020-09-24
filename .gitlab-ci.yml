@@ -161,8 +161,8 @@ cache:
     paths:
       - CypressE2E/cypress/screenshots/**/*.png
     expire_in: 1 day
-  dependencies:
-    - Portal-Setup
+  # dependencies:
+  #   - Portal-Setup
 
 # actual job definitions
 # all steps are the same, they come from the template above
