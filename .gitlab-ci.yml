@@ -52,8 +52,7 @@ cache:
 Cypress-Setup:
   when: always
   stage: test-setup
-  image:
-    name: cypress/base:10
+  image: cypress/base:10
   tags:
     - litmus-portal-2
   script:
@@ -185,7 +184,7 @@ Cypress-Setup:
     - litmus-portal-2
   script:
     # run Cypress test in load balancing mode
-    - cd CypressE2E && npm run tests -- --parallel --group "electrons on GitLab CI"
+    - cd CypressE2E && npm run tests
   artifacts:
     when: always
     paths:
