@@ -188,7 +188,7 @@ cache:
     - litmus-portal-2
   script:
     # run Cypress test in load balancing mode
-    - cd CypressE2E && cypress run --project ./CypressE2E
+    - cypress run --project ./CypressE2E
   artifacts:
     when: always
     paths:
