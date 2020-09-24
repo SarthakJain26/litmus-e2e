@@ -85,6 +85,22 @@ Cypress-Setup:
 #     - litmus-portal-2
 #   script:
 #     - echo ${FRONTEND_IP}
+#   artifacts:
+#     when: always
+#     paths:
+#       - CypressE2E/cypress/screenshots
+#   dependencies:
+#     - Portal-Setup
+
+# cypress-e2e:
+#   when: always
+#   stage: cypress-test
+#   image:
+#     name: cypress/base:10
+#   tags:
+#     - litmus-portal-2
+#   script:
+#     - echo ${FRONTEND_IP}
 #     - cd CypressE2E && CYPRESS_BASE_URL=http://${FRONTEND_IP}:9091/ npm run Create_Test
 #   artifacts:
 #     when: always
@@ -93,39 +109,22 @@ Cypress-Setup:
 #   dependencies:
 #     - Portal-Setup
 
-cypress-e2e:
-  when: always
-  stage: cypress-test
-  image:
-    name: cypress/base:10
-  tags:
-    - litmus-portal-2
-  script:
-    - echo ${FRONTEND_IP}
-    - cd CypressE2E && CYPRESS_BASE_URL=http://${FRONTEND_IP}:9091/ npm run Create_Test
-  artifacts:
-    when: always
-    paths:
-      - CypressE2E/cypress/screenshots
-  # dependencies:
-  #   - Portal-Setup
-
-cypress-e2e-2:
-  when: always
-  stage: cypress-test
-  image:
-    name: cypress/base:10
-  tags:
-    - litmus-portal-2
-  script:
-    - echo ${FRONTEND_IP}
-    - cd CypressE2E && CYPRESS_BASE_URL=http://${FRONTEND_IP}:9091/ npm run Routes_Test
-  artifacts:
-    when: always
-    paths:
-      - CypressE2E/cypress/screenshots
-  # dependencies:
-  #   - Portal-Setup
+# cypress-e2e-2:
+#   when: always
+#   stage: cypress-test
+#   image:
+#     name: cypress/base:10
+#   tags:
+#     - litmus-portal-2
+#   script:
+#     - echo ${FRONTEND_IP}
+#     - cd CypressE2E && CYPRESS_BASE_URL=http://${FRONTEND_IP}:9091/ npm run Routes_Test
+#   artifacts:
+#     when: always
+#     paths:
+#       - CypressE2E/cypress/screenshots
+#   dependencies:
+#     - Portal-Setup
 
 
 # routes-check:
@@ -177,3 +176,29 @@ cypress-e2e-2:
 #     paths:
 #       - .kube/
 #   cache: {}
+
+# all jobs that actually run tests can use the same definition
+.job_template:
+  image: cypress/base:10
+  stage: cypress-test
+  script:
+    # run Cypress test in load balancing mode
+    - npm run e2e:record -- --parallel --group "electrons on GitLab CI"
+  artifacts:
+    when: always
+    paths:
+      - CypressE2E/cypress/screenshots/**/*.png
+    expire_in: 1 day
+
+# actual job definitions
+# all steps are the same, they come from the template above
+electrons-1:
+  extends: .job_template
+electrons-2:
+  extends: .job_template
+electrons-3:
+  extends: .job_template
+electrons-4:
+  extends: .job_template
+electrons-5:
+  extends: .job_template

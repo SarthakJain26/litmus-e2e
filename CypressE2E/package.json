@@ -4,6 +4,7 @@
   "description": "Package for Testing",
   "main": "index.js",
   "scripts": {
+    "tests": "cypress run --record",
     "Basic_Setup": "cypress run --config testFiles='Basic_Setup/**/*.spec.js'",
     "Community_Test": "cypress run --spec 'cypress/integration/Parallel_Tests/Community/*.spec.js'",
     "Routes_Test": "cypress run --spec 'cypress/integration/Parallel_Tests/Routes/*.spec.js'",
