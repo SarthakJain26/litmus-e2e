@@ -149,6 +149,7 @@ cypress-e2e:
 
 # all jobs that actually run tests can use the same definition
 .job_template:
+  when: always
   image:
     name: cypress/included:5.2.0
     # cypress/included images have entrypoint set to "cypress"
