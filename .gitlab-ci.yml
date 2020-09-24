@@ -2,7 +2,7 @@ stages:
   - setup
   - portal-setup
   # - test-setup
-  # - pre-test-setup
+  - pre-test-setup
   - cypress-test
   - portal-cleanup
   - cleanup
@@ -91,22 +91,23 @@ Portal-Setup:
 #   dependencies:
 #     - Portal-Setup
 
-# cypress-e2e:
-#   when: always
-#   stage: cypress-test
-#   image:
-#     name: cypress/base:10
-#   tags:
-#     - litmus-portal-2
-#   script:
-#     - echo ${FRONTEND_IP}
-#     - cd CypressE2E && CYPRESS_BASE_URL=http://${FRONTEND_IP}:9091/ npm run Create_Test
-#   artifacts:
-#     when: always
-#     paths:
-#       - CypressE2E/cypress/screenshots
-#   dependencies:
-#     - Portal-Setup
+cypress-e2e:
+  when: always
+  stage: pre-test-setup
+  image:
+    name: cypress/included:5.2.0
+    entrypoint: [""]
+  tags:
+    - litmus-portal-2
+  script:
+    - echo ${FRONTEND_IP}
+    - CYPRESS_BASE_URL=http://${FRONTEND_IP}:9091/ cypress run --project ./CypressE2E --spec 'CypressE2E/cypress/integration/Basic_Setup/**/*.spec.js'
+  artifacts:
+    when: always
+    paths:
+      - CypressE2E/cypress/screenshots/**/*.png
+  dependencies:
+    - Portal-Setup
 
 # cypress-e2e-2:
 #   when: always
@@ -161,20 +162,26 @@ Portal-Setup:
     paths:
       - CypressE2E/cypress/screenshots/**/*.png
     expire_in: 1 day
-  # dependencies:
-  #   - Portal-Setup
+  dependencies:
+    - Portal-Setup
 
 # actual job definitions
 # all steps are the same, they come from the template above
-electrons-1:
+CommunityData-Check:
   extends: .job_template
   script: CYPRESS_BASE_URL=http://${FRONTEND_IP}:9091/ cypress run --project ./CypressE2E --spec 'CypressE2E/cypress/integration/Parallel_Tests/Community/*.spec.js'
-# electrons-2:
-#   extends: .job_template
-#   script: CYPRESS_BASE_URL=http://192.168.43.29:9091/ cypress run --project ./CypressE2E --spec 'cypress/integration/Parallel_Tests/Routes/*.spec.js'
-# electrons-3:
-#   extends: .job_template
-#   script: CYPRESS_BASE_URL=http://192.168.43.29:9091/ cypress run --project ./CypressE2E --spec 'cypress/integration/Parallel_Tests/Create_Workflow/*.spec.js'
+
+Routes-Check:
+  extends: .job_template
+  script: CYPRESS_BASE_URL=http://${FRONTEND_IP}:9091/ cypress run --project ./CypressE2E --spec 'CypressE2E/cypress/integration/Parallel_Tests/Routes/*.spec.js'
+
+CreateWorkflow-Check:
+  extends: .job_template
+  script: CYPRESS_BASE_URL=http://${FRONTEND_IP}:9091/ cypress run --project ./CypressE2E --spec 'CypressE2E/cypress/integration/Parallel_Tests/Create_Workflow/*.spec.js'
+
+AccountSettings-Check:
+  extends: .job_template
+  script: CYPRESS_BASE_URL=http://${FRONTEND_IP}:9091/ cypress run --project ./CypressE2E --spec 'CypressE2E/cypress/integration/Parallel_Tests/Account_Settings/*.spec.js'
 
 portal-cleanup:
   when: always
