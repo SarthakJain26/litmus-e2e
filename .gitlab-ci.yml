@@ -68,7 +68,7 @@ PreTest-Setup:
     - litmus-portal-2
   script:
     - echo ${FRONTEND_IP}
-    - cd CypressE2E && CYPRESS_BASE_URL=http://${FRONTEND_IP}:9091/ cypress run --config testFiles='Basic_Setup/**/*.spec.js'
+    - cd CypressE2E && CYPRESS_BASE_URL=http://${FRONTEND_IP}:9091/ npm run Tests --config testFiles='Basic_Setup/**/*.spec.js'
   artifacts:
     when: always
     paths:
@@ -95,22 +95,22 @@ PreTest-Setup:
 routes-check:
   extends: .cypress-e2e
   script:
-    - cd CypressE2E && CYPRESS_BASE_URL=http://${FRONTEND_IP}:9091/ cypress run --config testFiles='Parallel_Tests/Routes/*.spec.js'
+    - cd CypressE2E && CYPRESS_BASE_URL=http://${FRONTEND_IP}:9091/ npm run Tests --config testFiles='Parallel_Tests/Routes/*.spec.js'
 
 create-workflow:
   extends: .cypress-e2e
   script: 
-    - cd CypressE2E && CYPRESS_BASE_URL=http://${FRONTEND_IP}:9091/ cypress run --config testFiles='Parallel_Tests/Create_Workflow/*.spec.js'
+    - cd CypressE2E && CYPRESS_BASE_URL=http://${FRONTEND_IP}:9091/ npm run Tests --config testFiles='Parallel_Tests/Create_Workflow/*.spec.js'
 
 community-data:
   extends: .cypress-e2e
   script: 
-    - cd CypressE2E && CYPRESS_BASE_URL=http://${FRONTEND_IP}:9091/ cypress run --config testFiles='Parallel_Tests/Community/*.spec.js'
+    - cd CypressE2E && CYPRESS_BASE_URL=http://${FRONTEND_IP}:9091/ npm run Tests --config testFiles='Parallel_Tests/Community/*.spec.js'
 
 account-settings:
   extends: .cypress-e2e
   script: 
-    - cd CypressE2E && CYPRESS_BASE_URL=http://${FRONTEND_IP}:9091/ cypress run --config testFiles='Parallel_Tests/Account_Settings/*.spec.js'
+    - cd CypressE2E && CYPRESS_BASE_URL=http://${FRONTEND_IP}:9091/ npm run Tests --config testFiles='Parallel_Tests/Account_Settings/*.spec.js'
 
 portal-cleanup:
   when: always
