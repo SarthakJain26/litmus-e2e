@@ -1,11 +1,11 @@
 stages:
-  # - setup
-  # - portal-setup
+  - setup
+  - portal-setup
   # - test-setup
   # - pre-test-setup
   - cypress-test
-  # - portal-cleanup
-  # - cleanup
+  - portal-cleanup
+  - cleanup
 
 # variables:
 #   npm_config_cache: "$CI_PROJECT_DIR/.npm"
@@ -18,36 +18,36 @@ cache:
   #   - cache/Cypress
   #   - CypressE2E/node_modules
 
-# Cluster Connect:
-#   image: jonsy13/runner:latest
-#   stage: setup
-#   tags:
-#     - litmus-portal-2
-#   script:
-#     - chmod 755 ./build/gitlab/stages/1-gke-setup/cluster-setup
-#     - ./build/gitlab/stages/1-gke-setup/cluster-setup
-#   artifacts:
-#     when: always
-#     paths:
-#       - .kube/
-#   cache: {}
+Cluster Connect:
+  image: jonsy13/runner:latest
+  stage: setup
+  tags:
+    - litmus-portal-2
+  script:
+    - chmod 755 ./build/gitlab/stages/1-gke-setup/cluster-setup
+    - ./build/gitlab/stages/1-gke-setup/cluster-setup
+  artifacts:
+    when: always
+    paths:
+      - .kube/
+  cache: {}
 
-# Portal-Setup:
-#   image: jonsy13/runner:latest
-#   when: always
-#   stage: portal-setup
-#   tags: 
-#     - litmus-portal-2
-#   script:
-#     - chmod 755 ./install.sh
-#     - ./install.sh
-#   artifacts:
-#     when: always
-#     paths:
-#       - .kube/
-#     reports:
-#       dotenv: Portal-Setup.env
-#   cache: {}
+Portal-Setup:
+  image: jonsy13/runner:latest
+  when: always
+  stage: portal-setup
+  tags: 
+    - litmus-portal-2
+  script:
+    - chmod 755 ./install.sh
+    - ./install.sh
+  artifacts:
+    when: always
+    paths:
+      - .kube/
+    reports:
+      dotenv: Portal-Setup.env
+  cache: {}
 
 # Cypress-Setup:
 #   when: always
@@ -168,7 +168,7 @@ cache:
 # all steps are the same, they come from the template above
 electrons-1:
   extends: .job_template
-  script: CYPRESS_BASE_URL=http://192.168.43.29:9091/ cypress run --project ./CypressE2E --spec 'CypressE2E/cypress/integration/Parallel_Tests/Community/*.spec.js'
+  script: CYPRESS_BASE_URL=http://${FRONTEND_IP}:9091/ cypress run --project ./CypressE2E --spec 'CypressE2E/cypress/integration/Parallel_Tests/Community/*.spec.js'
 # electrons-2:
 #   extends: .job_template
 #   script: CYPRESS_BASE_URL=http://192.168.43.29:9091/ cypress run --project ./CypressE2E --spec 'cypress/integration/Parallel_Tests/Routes/*.spec.js'
@@ -176,32 +176,32 @@ electrons-1:
 #   extends: .job_template
 #   script: CYPRESS_BASE_URL=http://192.168.43.29:9091/ cypress run --project ./CypressE2E --spec 'cypress/integration/Parallel_Tests/Create_Workflow/*.spec.js'
 
-# portal-cleanup:
-#   when: always
-#   image: jonsy13/runner:latest
-#   stage: portal-cleanup
-#   tags: 
-#     - litmus-portal-2
-#   script:
-#     - chmod 755 ./uninstall.sh
-#     - ./uninstall.sh
-#   artifacts:
-#     when: always
-#     paths:
-#       - .kube/
-#   cache: {}
+portal-cleanup:
+  when: always
+  image: jonsy13/runner:latest
+  stage: portal-cleanup
+  tags: 
+    - litmus-portal-2
+  script:
+    - chmod 755 ./uninstall.sh
+    - ./uninstall.sh
+  artifacts:
+    when: always
+    paths:
+      - .kube/
+  cache: {}
     
-# Cluster Disconnect:
-#   when: always
-#   image: jonsy13/runner:latest
-#   stage: cleanup
-#   tags:
-#     - litmus-portal-2
-#   script: 
-#     - chmod 755 ./build/gitlab/stages/2-gke-cleanup/cluster-cleanup
-#     - ./build/gitlab/stages/2-gke-cleanup/cluster-cleanup
-#   artifacts:
-#     when: always
-#     paths:
-#       - .kube/
-#   cache: {}
+Cluster Disconnect:
+  when: always
+  image: jonsy13/runner:latest
+  stage: cleanup
+  tags:
+    - litmus-portal-2
+  script: 
+    - chmod 755 ./build/gitlab/stages/2-gke-cleanup/cluster-cleanup
+    - ./build/gitlab/stages/2-gke-cleanup/cluster-cleanup
+  artifacts:
+    when: always
+    paths:
+      - .kube/
+  cache: {}
