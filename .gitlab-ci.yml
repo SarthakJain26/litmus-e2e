@@ -1,62 +1,62 @@
 stages:
-  - setup
-  - portal-setup
-  # - test-setup
-  - pre-test-setup
+  # - setup
+  # - portal-setup
+  - test-setup
+  # - pre-test-setup
   - cypress-test
-  - portal-cleanup
-  - cleanup
+  # - portal-cleanup
+  # - cleanup
 
-# variables:
-#   npm_config_cache: "$CI_PROJECT_DIR/.npm"
-#   CYPRESS_CACHE_FOLDER: "$CI_PROJECT_DIR/cache/Cypress"
+variables:
+  npm_config_cache: "$CI_PROJECT_DIR/.npm"
+  CYPRESS_CACHE_FOLDER: "$CI_PROJECT_DIR/cache/Cypress"
 
 cache:
   key: ${CI_COMMIT_REF_SLUG}
-  # paths:
-  #   - .npm
-  #   - cache/Cypress
-  #   - CypressE2E/node_modules
+  paths:
+    - .npm
+    - cache/Cypress
+    - CypressE2E/node_modules
 
-Cluster Connect:
-  image: jonsy13/runner:latest
-  stage: setup
-  tags:
-    - litmus-portal-2
-  script:
-    - chmod 755 ./build/gitlab/stages/1-gke-setup/cluster-setup
-    - ./build/gitlab/stages/1-gke-setup/cluster-setup
-  artifacts:
-    when: always
-    paths:
-      - .kube/
-  cache: {}
-
-Portal-Setup:
-  image: jonsy13/runner:latest
-  when: always
-  stage: portal-setup
-  tags: 
-    - litmus-portal-2
-  script:
-    - chmod 755 ./install.sh
-    - ./install.sh
-  artifacts:
-    when: always
-    paths:
-      - .kube/
-    reports:
-      dotenv: Portal-Setup.env
-  cache: {}
-
-# Cypress-Setup:
-#   when: always
-#   stage: test-setup
-#   image: cypress/base:10
+# Cluster Connect:
+#   image: jonsy13/runner:latest
+#   stage: setup
 #   tags:
 #     - litmus-portal-2
 #   script:
-#     - cd CypressE2E && npm ci
+#     - chmod 755 ./build/gitlab/stages/1-gke-setup/cluster-setup
+#     - ./build/gitlab/stages/1-gke-setup/cluster-setup
+#   artifacts:
+#     when: always
+#     paths:
+#       - .kube/
+#   cache: {}
+
+# Portal-Setup:
+#   image: jonsy13/runner:latest
+#   when: always
+#   stage: portal-setup
+#   tags: 
+#     - litmus-portal-2
+#   script:
+#     - chmod 755 ./install.sh
+#     - ./install.sh
+#   artifacts:
+#     when: always
+#     paths:
+#       - .kube/
+#     reports:
+#       dotenv: Portal-Setup.env
+#   cache: {}
+
+Cypress-Setup:
+  when: always
+  stage: test-setup
+  image: cypress/base:10
+  tags:
+    - litmus-portal-2
+  script:
+    - cd CypressE2E && npm ci
 
 # PreTest-Setup:
 #   when: always
@@ -91,23 +91,23 @@ Portal-Setup:
 #   dependencies:
 #     - Portal-Setup
 
-cypress-e2e:
-  when: always
-  stage: pre-test-setup
-  image:
-    name: cypress/included:5.2.0
-    entrypoint: [""]
-  tags:
-    - litmus-portal-2
-  script:
-    - echo ${FRONTEND_IP}
-    - CYPRESS_BASE_URL=http://${FRONTEND_IP}:9091/ cypress run --project ./CypressE2E --spec 'CypressE2E/cypress/integration/Basic_Setup/**/*.spec.js'
-  artifacts:
-    when: always
-    paths:
-      - CypressE2E/cypress/screenshots/**/*.png
-  dependencies:
-    - Portal-Setup
+# cypress-e2e:
+#   when: always
+#   stage: pre-test-setup
+#   image:
+#     name: cypress/included:5.2.0
+#     entrypoint: [""]
+#   tags:
+#     - litmus-portal-2
+#   script:
+#     - echo ${FRONTEND_IP}
+#     - CYPRESS_BASE_URL=http://${FRONTEND_IP}:9091/ cypress run --project ./CypressE2E --spec 'CypressE2E/cypress/integration/Basic_Setup/**/*.spec.js'
+#   artifacts:
+#     when: always
+#     paths:
+#       - CypressE2E/cypress/screenshots/**/*.png
+#   dependencies:
+#     - Portal-Setup
 
 # cypress-e2e-2:
 #   when: always
@@ -148,33 +148,33 @@ cypress-e2e:
 #     - cd CypressE2E && CYPRESS_BASE_URL=http://${FRONTEND_IP}:9091/ npm run Account_Settings
 
 # all jobs that actually run tests can use the same definition
-.job_template:
-  when: always
-  image:
-    name: cypress/included:5.2.0
-    # cypress/included images have entrypoint set to "cypress"
-    # which conflicts with GitLab CI wrapper shell script
-    entrypoint: [""]
-  stage: cypress-test
-  tags:
-    - litmus-portal-2
-  artifacts:
-    when: always
-    paths:
-      - CypressE2E/cypress/screenshots/**/*.png
-    expire_in: 1 day
-  dependencies:
-    - Portal-Setup
+# .job_template:
+#   when: always
+#   image:
+#     name: cypress/included:5.2.0
+#     # cypress/included images have entrypoint set to "cypress"
+#     # which conflicts with GitLab CI wrapper shell script
+#     entrypoint: [""]
+#   stage: cypress-test
+#   tags:
+#     - litmus-portal-2
+#   artifacts:
+#     when: always
+#     paths:
+#       - CypressE2E/cypress/screenshots/**/*.png
+#     expire_in: 1 day
+#   dependencies:
+#     - Portal-Setup
 
 # actual job definitions
 # all steps are the same, they come from the template above
-CommunityData-Check:
-  extends: .job_template
-  script: CYPRESS_BASE_URL=http://${FRONTEND_IP}:9091/ cypress run --project ./CypressE2E --spec 'CypressE2E/cypress/integration/Parallel_Tests/Community/*.spec.js'
+# CommunityData-Check:
+#   extends: .job_template
+#   script: CYPRESS_BASE_URL=http://${FRONTEND_IP}:9091/ cypress run --project ./CypressE2E --spec 'CypressE2E/cypress/integration/Parallel_Tests/Community/*.spec.js'
 
-Routes-Check:
-  extends: .job_template
-  script: CYPRESS_BASE_URL=http://${FRONTEND_IP}:9091/ cypress run --project ./CypressE2E --spec 'CypressE2E/cypress/integration/Parallel_Tests/Routes/*.spec.js'
+# Routes-Check:
+#   extends: .job_template
+#   script: CYPRESS_BASE_URL=http://${FRONTEND_IP}:9091/ cypress run --project ./CypressE2E --spec 'CypressE2E/cypress/integration/Parallel_Tests/Routes/*.spec.js'
 
 # CreateWorkflow-Check:
 #   extends: .job_template
@@ -184,32 +184,37 @@ Routes-Check:
 #   extends: .job_template
 #   script: CYPRESS_BASE_URL=http://${FRONTEND_IP}:9091/ cypress run --project ./CypressE2E --spec 'CypressE2E/cypress/integration/Parallel_Tests/Account_Settings/*.spec.js'
 
-portal-cleanup:
-  when: always
-  image: jonsy13/runner:latest
-  stage: portal-cleanup
-  tags: 
-    - litmus-portal-2
-  script:
-    - chmod 755 ./uninstall.sh
-    - ./uninstall.sh
-  artifacts:
-    when: always
-    paths:
-      - .kube/
-  cache: {}
+# portal-cleanup:
+#   when: always
+#   image: jonsy13/runner:latest
+#   stage: portal-cleanup
+#   tags: 
+#     - litmus-portal-2
+#   script:
+#     - chmod 755 ./uninstall.sh
+#     - ./uninstall.sh
+#   artifacts:
+#     when: always
+#     paths:
+#       - .kube/
+#   cache: {}
     
-Cluster Disconnect:
-  when: always
-  image: jonsy13/runner:latest
-  stage: cleanup
-  tags:
-    - litmus-portal-2
+# Cluster Disconnect:
+#   when: always
+#   image: jonsy13/runner:latest
+#   stage: cleanup
+#   tags:
+#     - litmus-portal-2
+#   script: 
+#     - chmod 755 ./build/gitlab/stages/2-gke-cleanup/cluster-cleanup
+#     - ./build/gitlab/stages/2-gke-cleanup/cluster-cleanup
+#   artifacts:
+#     when: always
+#     paths:
+#       - .kube/
+#   cache: {}
+
+tests:
+  parallel: 4
   script: 
-    - chmod 755 ./build/gitlab/stages/2-gke-cleanup/cluster-cleanup
-    - ./build/gitlab/stages/2-gke-cleanup/cluster-cleanup
-  artifacts:
-    when: always
-    paths:
-      - .kube/
-  cache: {}
+    - cd CypressE2E && $(npm bin)/knapsack-pro-cypress
