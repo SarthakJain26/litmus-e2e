@@ -18,6 +18,7 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
+    "@knapsack-pro/cypress": "^4.0.1",
     "cypress": "^5.2.0"
   }
 }
