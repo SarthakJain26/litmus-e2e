@@ -217,6 +217,8 @@ Cypress-Setup:
 tests:
   stage: cypress-test
   image: cypress/base:10
+  tags:
+    - litmus-portal-2
   parallel: 4
   script: 
     - cd CypressE2E && $(npm bin)/knapsack-pro-cypress
