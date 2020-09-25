@@ -221,4 +221,4 @@ tests:
     - litmus-portal-2
   parallel: 4
   script: 
-    - cd CypressE2E && $(npm bin)/knapsack-pro-cypress
+    - cd CypressE2E/ && npm run Community_Test
