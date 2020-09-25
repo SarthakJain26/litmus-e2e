@@ -215,6 +215,7 @@ Cypress-Setup:
 #   cache: {}
 
 tests:
+  stage: cypress-test
   parallel: 4
   script: 
     - cd CypressE2E && $(npm bin)/knapsack-pro-cypress
