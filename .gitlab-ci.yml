@@ -176,13 +176,13 @@ Routes-Check:
   extends: .job_template
   script: CYPRESS_BASE_URL=http://${FRONTEND_IP}:9091/ cypress run --project ./CypressE2E --spec 'CypressE2E/cypress/integration/Parallel_Tests/Routes/*.spec.js'
 
-CreateWorkflow-Check:
-  extends: .job_template
-  script: CYPRESS_BASE_URL=http://${FRONTEND_IP}:9091/ cypress run --project ./CypressE2E --spec 'CypressE2E/cypress/integration/Parallel_Tests/Create_Workflow/*.spec.js'
+# CreateWorkflow-Check:
+#   extends: .job_template
+#   script: CYPRESS_BASE_URL=http://${FRONTEND_IP}:9091/ cypress run --project ./CypressE2E --spec 'CypressE2E/cypress/integration/Parallel_Tests/Create_Workflow/*.spec.js'
 
-AccountSettings-Check:
-  extends: .job_template
-  script: CYPRESS_BASE_URL=http://${FRONTEND_IP}:9091/ cypress run --project ./CypressE2E --spec 'CypressE2E/cypress/integration/Parallel_Tests/Account_Settings/*.spec.js'
+# AccountSettings-Check:
+#   extends: .job_template
+#   script: CYPRESS_BASE_URL=http://${FRONTEND_IP}:9091/ cypress run --project ./CypressE2E --spec 'CypressE2E/cypress/integration/Parallel_Tests/Account_Settings/*.spec.js'
 
 portal-cleanup:
   when: always
