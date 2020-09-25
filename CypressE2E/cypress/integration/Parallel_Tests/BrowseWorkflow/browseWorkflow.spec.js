@@ -7,7 +7,7 @@ describe("Testing the Browse Workflow Tab", () => {
 		cy.server();
 		cy.visit("/login");
 		cy.route("POST", "/login").as("loginResponse"); //Alias for Login Route
-		cy.login("amityt", "litmus");
+		cy.login("admin", "litmus");
 		cy.wait("@loginResponse")
 			.its("status")
 			.should("eq", 200)
