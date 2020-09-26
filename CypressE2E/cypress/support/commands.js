@@ -77,7 +77,7 @@ Cypress.Commands.add(
   "changePassword",
   (currPassword, newPassword, confPasword) => {
     cy.server();
-    cy.route("POST", "/update/password").as("passwordResponse");
+    cy.route("POST", "/auth/update/password").as("passwordResponse");
     currPassword === ""
       ? cy.get("[data-cy=currPassword] input").clear()
       : cy.get("[data-cy=currPassword] input").clear().type(currPassword);

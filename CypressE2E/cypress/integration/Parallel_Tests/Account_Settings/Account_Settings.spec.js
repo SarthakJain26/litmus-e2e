@@ -5,7 +5,7 @@ describe("Testing the My accounts section", () => {
     indexedDB.deleteDatabase("localforage");
     cy.server();
     cy.visit("/login");
-    cy.route("POST", "/login").as("loginResponse"); //Alias for Login Route
+    cy.route("POST", "/auth/login").as("loginResponse"); //Alias for Login Route
     cy.login("admin", "litmus");
     cy.wait("@loginResponse").its("status").should("eq", 200); //Request Done.
     cy.contains("Congratulations").should("be.visible"); //confirmation of HomePage loaded.
@@ -23,7 +23,7 @@ describe("Testing the My accounts section", () => {
 
   it("Changing the personal details by inputting all details", () => {
     cy.server();
-    cy.route("POST", "/update/details").as("detailsResponse");
+    cy.route("POST", "/auth/update/details").as("detailsResponse");
     cy.get("[data-cy=InputName] input").clear().type("Saranya J29");
     cy.get("[data-cy=InputEmail] input").clear().type("saranya29@gmail.com");
     cy.get("[data-cy=save]").click();
@@ -35,7 +35,7 @@ describe("Testing the My accounts section", () => {
 
   it("Changing the personal details with empty email field", () => {
     cy.server();
-    cy.route("POST", "/update/details").as("detailsResponse");
+    cy.route("POST", "/auth/update/details").as("detailsResponse");
     cy.get("[data-cy=InputName] input").clear().type("Saranya J");
     cy.get("[data-cy=InputEmail] input").clear();
     cy.get("[data-cy=save]").click();
@@ -58,7 +58,7 @@ describe("Testing the My accounts section", () => {
     cy.logout();
     cy.url().should("include", "/login");
     cy.server();
-    cy.route("POST", "/login").as("loginResponse"); //Alias for Login Route
+    cy.route("POST", "/auth/login").as("loginResponse"); //Alias for Login Route
     cy.login("admin", "litmus@123");
     cy.wait("@loginResponse").its("status").should("eq", 200); //Request Done.
     cy.contains("Congratulations").should("be.visible"); //confirmation of HomePage loaded.
@@ -94,7 +94,7 @@ describe("Testing the My accounts section", () => {
     );
     cy.logout();
     cy.server();
-    cy.route("POST", "/login").as("loginResponse"); //Alias for Login Route
+    cy.route("POST", "/auth/login").as("loginResponse"); //Alias for Login Route
     cy.login("admin", "litmus");
     cy.wait("@loginResponse").its("status").should("eq", 200); //Request Done.
     cy.contains("Congratulations").should("be.visible"); //confirmation of HomePage loaded.

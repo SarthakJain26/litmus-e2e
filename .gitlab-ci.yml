@@ -213,11 +213,3 @@ Cluster Disconnect:
     paths:
       - .kube/
   cache: {}
-
-# tests:
-#   when: always
-#   stage: cypress-test
-#   image: cypress/base:10
-#   parallel: 4
-#   script: 
-#     - cd CypressE2E/ && npm run Community_Test
