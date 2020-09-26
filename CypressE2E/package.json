@@ -10,7 +10,7 @@
     "Routes_Tests": "cypress run --spec 'cypress/integration/Parallel_Tests/Routes/*.spec.js'",
     "CreateWorkflow_Tests": "cypress run --spec 'cypress/integration/Parallel_Tests/Create_Workflow/*.spec.js'",
     "AccountSettings_Tests": "cypress run --spec 'cypress/integration/Parallel_Tests/Account_Settings/*.spec.js'",
-    "BrowseWorkflow_Tests": "cypress run --spec 'cypress/integration/Parallel_Tests/Account_Settings/*.spec.js'"
+    "BrowseWorkflow_Tests": "cypress run --spec 'cypress/integration/Parallel_Tests/BrowseWorkflow/*.spec.js'"
   },
   "keywords": [
     "Testing",
