@@ -15,12 +15,12 @@ describe("Testing the Browse Workflow Tab", () => {
 	});
 	it("Visiting the browse workflow page and verifying the availability of data", () => {
 		cy.wait(2000); //Waiting for the homepage to load successfully
-		cy.get("[data-cy=workflows]").click();
-		cy.url().should("contain", "workflows");
 		cy.route({
 			method: "POST",
 			url: "/api/query",
-		}).as("workflowData"); //Alias for the WorkflowRuns Query
+		}).as("workflowData");
+		cy.get("[data-cy=workflows]").click();
+		cy.url().should("contain", "workflows");
 		cy.get("[data-cy=browseWorkflow] > .MuiTab-wrapper").click();
 		cy.get("[data-cy=browseWorkflowTable]").should("exist");
 		cy.log("Browse Workflow Table Visible");
@@ -42,12 +42,12 @@ describe("Testing the Browse Workflow Tab", () => {
 	});
 	it("Testing the menu options in first row of Browse Workflow Table", () => {
 		cy.wait(2000); //Waiting for the homepage to load successfully
-		cy.get("[data-cy=workflows]").click();
-		cy.url().should("contain", "workflows");
 		cy.route({
 			method: "POST",
 			url: "/api/query",
 		}).as("workflowData"); //Alias for the WorkflowRuns Query
+		cy.get("[data-cy=workflows]").click();
+		cy.url().should("contain", "workflows");
 		cy.get("[data-cy=browseWorkflow] > .MuiTab-wrapper").click();
 		cy.get("[data-cy=browseWorkflowTable]").should("exist");
 		cy.log("Browse Workflow Table Visible");
@@ -65,12 +65,12 @@ describe("Testing the Browse Workflow Tab", () => {
 	});
 	it("Testing the menu options to redirect to the Argo Graph page", () => {
 		cy.wait(2000); //Waiting for the homepage to load successfully
-		cy.get("[data-cy=workflows]").click();
-		cy.url().should("contain", "workflows");
 		cy.route({
 			method: "POST",
 			url: "/api/query",
 		}).as("workflowData");
+		cy.get("[data-cy=workflows]").click();
+		cy.url().should("contain", "workflows");
 		cy.get("[data-cy=browseWorkflow] > .MuiTab-wrapper").click();
 		cy.get("[data-cy=browseWorkflowTable]").should("exist");
 		cy.log("Browse Workflow Table Visible");

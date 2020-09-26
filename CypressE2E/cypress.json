@@ -6,6 +6,5 @@
   "defaultCommandTimeout": 10000,
   "chromeWebSecurity": false,
   "video": false,
-  "projectId": "6p4c8o",
   "experimentalNetworkStubbing":true
 }
