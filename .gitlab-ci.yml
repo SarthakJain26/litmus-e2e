@@ -67,7 +67,7 @@ PreTest-Setup:
   #   - litmus-portal-2
   script:
     - echo ${FRONTEND_IP}
-    - cd CypressE2E && CYPRESS_BASE_URL=http://${FRONTEND_IP}:9091/ npm run Basic_Setup
+    - cd CypressE2E && CYPRESS_BASE_URL=http://${FRONTEND_IP}:9091/ npm run BasicSetup_Tests
   artifacts:
     when: always
     paths:
@@ -82,7 +82,7 @@ PreTest-Setup:
     name: cypress/base:10
   # tags:
   #   - litmus-portal-2
-  script:
+  before_script:
     - echo ${FRONTEND_IP}
   artifacts:
     when: always
@@ -127,25 +127,31 @@ PreTest-Setup:
 #     - Portal-Setup
 
 
-routes-check:
+routesCheck_Tests:
   extends: .cypress-e2e
-  after_script:
-    - cd CypressE2E && CYPRESS_BASE_URL=http://${FRONTEND_IP}:9091/ npm run Routes_Test
+  script:
+    - cd CypressE2E && CYPRESS_BASE_URL=http://${FRONTEND_IP}:9091/ npm run Routes_Tests
 
-create-workflow:
+createWorkflow_Tests:
   extends: .cypress-e2e
-  after_script: 
-    - cd CypressE2E && CYPRESS_BASE_URL=http://${FRONTEND_IP}:9091/ npm run Create_Test
+  script: 
+    - cd CypressE2E && CYPRESS_BASE_URL=http://${FRONTEND_IP}:9091/ npm run CreateWorkflow_Tests
 
-community-data:
+communityData_Tests:
   extends: .cypress-e2e
-  after_script: 
-    - cd CypressE2E && CYPRESS_BASE_URL=http://${FRONTEND_IP}:9091/ npm run Community_Test
+  script: 
+    - cd CypressE2E && CYPRESS_BASE_URL=http://${FRONTEND_IP}:9091/ npm run Community_Tests
 
-account-settings:
+accountSettings_Tests:
   extends: .cypress-e2e
-  after_script: 
-    - cd CypressE2E && CYPRESS_BASE_URL=http://${FRONTEND_IP}:9091/ npm run Account_Settings
+  script: 
+    - cd CypressE2E && CYPRESS_BASE_URL=http://${FRONTEND_IP}:9091/ npm run AccountSettings_Tests
+
+browseWorkflow_Tests:
+  extends: .cypress-e2e
+  script: 
+    - cd CypressE2E && CYPRESS_BASE_URL=http://${FRONTEND_IP}:9091/ npm run BrowseWorkflow_Tests
+
 
 # all jobs that actually run tests can use the same definition
 # .job_template:

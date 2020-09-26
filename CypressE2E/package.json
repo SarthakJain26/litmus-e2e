@@ -5,11 +5,12 @@
   "main": "index.js",
   "scripts": {
     "tests": "cypress run",
-    "Basic_Setup": "cypress run --config testFiles='Basic_Setup/**/*.spec.js'",
-    "Community_Test": "cypress run --spec 'cypress/integration/Parallel_Tests/Community/*.spec.js'",
-    "Routes_Test": "cypress run --spec 'cypress/integration/Parallel_Tests/Routes/*.spec.js'",
-    "Create_Test": "cypress run --spec 'cypress/integration/Parallel_Tests/Create_Workflow/*.spec.js'",
-    "Account_Settings": "cypress run --spec 'cypress/integration/Parallel_Tests/Account_Settings/*.spec.js'"
+    "BasicSetup_Tests": "cypress run --config testFiles='Basic_Setup/**/*.spec.js'",
+    "Community_Tests": "cypress run --spec 'cypress/integration/Parallel_Tests/Community/*.spec.js'",
+    "Routes_Tests": "cypress run --spec 'cypress/integration/Parallel_Tests/Routes/*.spec.js'",
+    "CreateWorkflow_Tests": "cypress run --spec 'cypress/integration/Parallel_Tests/Create_Workflow/*.spec.js'",
+    "AccountSettings_Tests": "cypress run --spec 'cypress/integration/Parallel_Tests/Account_Settings/*.spec.js'",
+    "BrowseWorkflow_Tests": "cypress run --spec 'cypress/integration/Parallel_Tests/Account_Settings/*.spec.js'"
   },
   "keywords": [
     "Testing",
