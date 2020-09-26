@@ -107,3 +107,18 @@ Cypress.Commands.add("headerCheck", (name, email) => {
     : cy.get("[data-cy=email-header]").should("contain", email);
   cy.root().click();
 });
+
+
+// Custom function for logging In & setting token without using UI
+Cypress.Commands.add("requestLogin",()=>{
+  cy.request({
+    method: 'POST',
+    url: '/auth/login',
+    body: {
+      username: 'admin',
+      password: 'litmus'
+    }
+  }).its('body').then((res)=>{
+    cy.setCookie('token',res.access_token);
+  });
+});

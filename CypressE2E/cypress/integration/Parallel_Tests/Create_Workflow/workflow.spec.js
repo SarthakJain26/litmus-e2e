@@ -5,8 +5,7 @@ describe("Testing the create Workflow Utility",()=>{
     before("Clearing the Cookies and deleting the ",()=>{
         cy.clearCookies();
         indexedDB.deleteDatabase('localforage');
-        cy.visit('/');
-        cy.login("admin","litmus");
+        cy.requestLogin();
     });
 
     it("Checking the accessibility of the Create-Workflow Page",()=>{

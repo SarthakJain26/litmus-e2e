@@ -1,14 +1,12 @@
 /// <reference types="Cypress" />
+
 describe("Testing the My accounts section", () => {
   before("Clearing local storage", () => {
     cy.clearCookie("token");
     indexedDB.deleteDatabase("localforage");
-    cy.server();
-    cy.visit("/login");
-    cy.route("POST", "/auth/login").as("loginResponse"); //Alias for Login Route
-    cy.login("admin", "litmus");
-    cy.wait("@loginResponse").its("status").should("eq", 200); //Request Done.
-    cy.contains("Congratulations").should("be.visible"); //confirmation of HomePage loaded.
+    cy.requestLogin();
+    cy.visit("/");
+    cy.contains("Congratulations").should("be.visible"); // confirmation of HomePage loaded.
   });
 
   it("Checking the accessibility of the Settings", () => {

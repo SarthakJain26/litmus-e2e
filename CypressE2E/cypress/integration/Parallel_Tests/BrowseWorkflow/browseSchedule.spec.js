@@ -4,20 +4,14 @@ describe("Testing the Browse Schedule Tab", () => {
 	beforeEach("Clearing local storage", () => {
 		cy.clearCookie("token");
 		indexedDB.deleteDatabase("localforage");
-		cy.server();
-		cy.visit("/login");
-		cy.route("POST", "/auth/login").as("loginResponse"); //Alias for Login Route
-		cy.login("admin", "litmus");
-		cy.wait("@loginResponse")
-			.its("status")
-			.should("eq", 200)
-			.log("Login Successful"); //Request Done.
+		cy.requestLogin();
+		cy.visit("/");
 	});
 	it("Visiting the Browse Schedule Tab and verifying the availability of data", () => {
-		cy.wait(2000); //Waiting for the homepage to load successfully
 		cy.get("[data-cy=workflows]").click();
 		cy.url().should("contain", "workflows");
 		cy.get("[data-cy=browseSchedule] > .MuiTab-wrapper");
+		cy.server();
 		cy.route({
 			method: "POST",
 			url: "/api/query",
@@ -42,11 +36,11 @@ describe("Testing the Browse Schedule Tab", () => {
 		});
 	});
 	it("Testing the menu options in first row of Browse Schedule Table", () => {
-		cy.wait(2000); //Waiting for the homepage to load successfully
 		cy.get("[data-cy=workflows]").click();
 		cy.url().should("contain", "workflows");
 
 		cy.get("[data-cy=browseSchedule] > .MuiTab-wrapper");
+		cy.server();
 		cy.route({
 			method: "POST",
 			url: "/api/query",

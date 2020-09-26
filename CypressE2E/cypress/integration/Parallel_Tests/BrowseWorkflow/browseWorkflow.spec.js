@@ -4,14 +4,8 @@ describe("Testing the Browse Workflow Tab", () => {
 	beforeEach("Clearing local storage", () => {
 		cy.clearCookie("token");
 		indexedDB.deleteDatabase("localforage");
-		cy.server();
-		cy.visit("/login");
-		cy.route("POST", "/auth/login").as("loginResponse"); //Alias for Login Route
-		cy.login("admin", "litmus");
-		cy.wait("@loginResponse")
-			.its("status")
-			.should("eq", 200)
-			.log("Login Successful"); //Request Done.
+		cy.requestLogin();
+		cy.visit("/");
 	});
 	it("Visiting the browse workflow page and verifying the availability of data", () => {
 		cy.wait(2000); //Waiting for the homepage to load successfully
