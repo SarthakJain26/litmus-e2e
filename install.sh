@@ -8,7 +8,7 @@ cat $path/.kube/config > ~/.kube/config
 cat $path/.kube/admin.conf > ~/.kube/config
 
 # Booting up the Litmus-Portal Setup
-kubectl apply -f https://raw.githubusercontent.com/litmuschaos/litmus/master/litmus-portal/k8s-manifest.yml
+kubectl apply -f https://raw.githubusercontent.com/Jonsy13/litmus/testing/litmus-portal/k8s-manifest.yml
 kubectl patch svc litmusportal-frontend-service -p '{"spec": {"type": "LoadBalancer"}}' -n litmus
 kubectl wait --for=condition=Ready pods --all --namespace litmus --timeout=180s
 
