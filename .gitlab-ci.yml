@@ -53,8 +53,8 @@ Cypress-Setup:
   when: always
   stage: test-setup
   image: cypress/base:10
-  tags:
-    - litmus-portal-2
+  # tags:
+  #   - litmus-portal-2
   script:
     - cd CypressE2E && npm ci
 
@@ -215,6 +215,7 @@ Cypress-Setup:
 #   cache: {}
 
 tests:
+  when: always
   stage: cypress-test
   image: cypress/base:10
   parallel: 4
