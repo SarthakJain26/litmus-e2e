@@ -23,7 +23,7 @@ describe("Testing the My accounts section", () => {
 
   it("Changing the personal details by inputting all details", () => {
     cy.server();
-    cy.route("POST", "/auth/update/details").as("detailsResponse");
+    cy.route("POST", "/api/query").as("detailsResponse");
     cy.get("[data-cy=InputName] input").clear().type("Saranya J29");
     cy.get("[data-cy=InputEmail] input").clear().type("saranya29@gmail.com");
     cy.get("[data-cy=save]").click();
@@ -35,7 +35,7 @@ describe("Testing the My accounts section", () => {
 
   it("Changing the personal details with empty email field", () => {
     cy.server();
-    cy.route("POST", "/auth/update/details").as("detailsResponse");
+    cy.route("POST", "/api/query").as("detailsResponse");
     cy.get("[data-cy=InputName] input").clear().type("Saranya J");
     cy.get("[data-cy=InputEmail] input").clear();
     cy.get("[data-cy=save]").click();

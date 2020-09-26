@@ -10,7 +10,7 @@ describe("Testing the Templates Tab", () => {
 		indexedDB.deleteDatabase("localforage");
 		cy.server();
 		cy.visit("/login");
-		cy.route("POST", "/login").as("loginResponse"); //Alias for Login Route
+		cy.route("POST", "/auth/login").as("loginResponse"); //Alias for Login Route
 		cy.login("admin", "litmus");
 		cy.wait("@loginResponse")
 			.its("status")

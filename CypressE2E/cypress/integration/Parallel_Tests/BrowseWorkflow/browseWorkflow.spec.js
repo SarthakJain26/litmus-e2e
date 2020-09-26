@@ -6,7 +6,7 @@ describe("Testing the Browse Workflow Tab", () => {
 		indexedDB.deleteDatabase("localforage");
 		cy.server();
 		cy.visit("/login");
-		cy.route("POST", "/login").as("loginResponse"); //Alias for Login Route
+		cy.route("POST", "/auth/login").as("loginResponse"); //Alias for Login Route
 		cy.login("admin", "litmus");
 		cy.wait("@loginResponse")
 			.its("status")
@@ -19,7 +19,7 @@ describe("Testing the Browse Workflow Tab", () => {
 		cy.url().should("contain", "workflows");
 		cy.route({
 			method: "POST",
-			url: "/query",
+			url: "/api/query",
 		}).as("workflowData"); //Alias for the WorkflowRuns Query
 		cy.get("[data-cy=browseWorkflow] > .MuiTab-wrapper").click();
 		cy.get("[data-cy=browseWorkflowTable]").should("exist");
@@ -46,7 +46,7 @@ describe("Testing the Browse Workflow Tab", () => {
 		cy.url().should("contain", "workflows");
 		cy.route({
 			method: "POST",
-			url: "/query",
+			url: "/api/query",
 		}).as("workflowData"); //Alias for the WorkflowRuns Query
 		cy.get("[data-cy=browseWorkflow] > .MuiTab-wrapper").click();
 		cy.get("[data-cy=browseWorkflowTable]").should("exist");
@@ -69,7 +69,7 @@ describe("Testing the Browse Workflow Tab", () => {
 		cy.url().should("contain", "workflows");
 		cy.route({
 			method: "POST",
-			url: "/query",
+			url: "/api/query",
 		}).as("workflowData");
 		cy.get("[data-cy=browseWorkflow] > .MuiTab-wrapper").click();
 		cy.get("[data-cy=browseWorkflowTable]").should("exist");

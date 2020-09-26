@@ -6,7 +6,7 @@ describe("Testing the Browse Schedule Tab", () => {
 		indexedDB.deleteDatabase("localforage");
 		cy.server();
 		cy.visit("/login");
-		cy.route("POST", "/login").as("loginResponse"); //Alias for Login Route
+		cy.route("POST", "/auth/login").as("loginResponse"); //Alias for Login Route
 		cy.login("admin", "litmus");
 		cy.wait("@loginResponse")
 			.its("status")
@@ -20,7 +20,7 @@ describe("Testing the Browse Schedule Tab", () => {
 		cy.get("[data-cy=browseSchedule] > .MuiTab-wrapper");
 		cy.route({
 			method: "POST",
-			url: "/query",
+			url: "/api/query",
 		}).as("scheduleData"); //Alias for the WorkflowSchedule Query
 		cy.get("[data-cy=browseSchedule] > .MuiTab-wrapper").click();
 		cy.get("[data-cy=browseScheduleTable]").should("exist");
@@ -49,7 +49,7 @@ describe("Testing the Browse Schedule Tab", () => {
 		cy.get("[data-cy=browseSchedule] > .MuiTab-wrapper");
 		cy.route({
 			method: "POST",
-			url: "/query",
+			url: "/api/query",
 		}).as("scheduleData"); //Alias for the WorkflowSchedule Query
 		cy.get("[data-cy=browseSchedule] > .MuiTab-wrapper").click();
 		cy.get("[data-cy=browseScheduleTable]").should("exist");
