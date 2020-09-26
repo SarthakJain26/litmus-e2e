@@ -85,8 +85,8 @@ Cypress.Commands.add(
       ? cy.get("[data-cy=newPassword] input").clear()
       : cy.get("[data-cy=newPassword] input").clear().type(newPassword);
     confPasword === ""
-      ? cy.get("[data-cy=confPasword] input").clear()
-      : cy.get("[data-cy=confPasword] input").clear().type(confPasword);
+      ? cy.get("[data-cy=confPassword] input").clear()
+      : cy.get("[data-cy=confPassword] input").clear().type(confPasword);
     cy.get("[data-cy=change-password]").click();
   }
 );
