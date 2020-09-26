@@ -3,6 +3,7 @@
 describe("Testing the accessibility of Welcome Modal",()=>{
 
     beforeEach("Clearing local storage",()=>{
+        cy.clearCookie('token');
         indexedDB.deleteDatabase('localforage');
         cy.visit('/');
         cy.login("admin","litmus");
