@@ -1,9 +1,13 @@
 /// <reference types="Cypress" />
+let user;
 
 describe("Testing the My accounts section", () => {
   before("Clearing local storage", () => {
     cy.clearCookie("token");
     indexedDB.deleteDatabase("localforage");
+    cy.fixture("Users").then(User=>{
+      user = User;
+    });
     cy.requestLogin();
     cy.visit("/");
     cy.contains("Congratulations").should("be.visible"); // confirmation of HomePage loaded.
@@ -22,34 +26,34 @@ describe("Testing the My accounts section", () => {
   it("Changing the personal details by inputting all details", () => {
     cy.server();
     cy.route("POST", "/api/query").as("detailsResponse");
-    cy.get("[data-cy=InputName] input").clear().type("Saranya J29");
-    cy.get("[data-cy=InputEmail] input").clear().type("saranya29@gmail.com");
+    cy.get("[data-cy=InputName] input").clear().type(user.NewName);
+    cy.get("[data-cy=InputEmail] input").clear().type(user.NewEmail);
     cy.get("[data-cy=save]").click();
     cy.wait("@detailsResponse").its("status").should("eq", 200); //Request Done.
     cy.modalClose();
     cy.get("[data-cy=done]").should("not.exist");
-    cy.headerCheck("Saranya J29", "saranya29@gmail.com");
+    cy.headerCheck(user.NewName, user.NewEmail);
   });
 
   it("Changing the personal details with empty email field", () => {
     cy.server();
     cy.route("POST", "/api/query").as("detailsResponse");
-    cy.get("[data-cy=InputName] input").clear().type("Saranya J");
+    cy.get("[data-cy=InputName] input").clear().type(user.NewName);
     cy.get("[data-cy=InputEmail] input").clear();
     cy.get("[data-cy=save]").click();
     cy.wait("@detailsResponse").its("status").should("eq", 200); //Request Done.
     cy.modalClose();
-    cy.headerCheck("Saranya J", "");
+    cy.headerCheck(user.NewName, "");
   });
 
   it("Changing the personal details with empty fullname field", () => {
     cy.get("[data-cy=InputName] input").clear();
-    cy.get("[data-cy=InputEmail] input").clear().type("saranya@gmail.com");
+    cy.get("[data-cy=InputEmail] input").clear().type(user.NewEmail);
     cy.get("[data-cy=save] button").should("be.disabled");
   });
 
   it("Changing the password by inputting all the three password fields", () => {
-    cy.changePassword("litmus", "litmus@123", "litmus@123");
+    cy.changePassword(user.AdminPassword, user.NewPassword, user.NewPassword);
     cy.wait("@passwordResponse").its("status").should("eq", 200); //Request Done.
     cy.modalClose();
     cy.get("[data-cy=done]").should("not.exist");
@@ -57,12 +61,12 @@ describe("Testing the My accounts section", () => {
     cy.url().should("include", "/login");
     cy.server();
     cy.route("POST", "/auth/login").as("loginResponse"); //Alias for Login Route
-    cy.login("admin", "litmus@123");
+    cy.login(user.AdminName, user.NewPassword);
     cy.wait("@loginResponse").its("status").should("eq", 200); //Request Done.
     cy.contains("Congratulations").should("be.visible"); //confirmation of HomePage loaded.
     cy.log("Reverting back the password to litmus");
     cy.contains("Settings").click();
-    cy.changePassword("litmus@123", "litmus", "litmus");
+    cy.changePassword(user.NewPassword, user.AdminPassword, user.AdminPassword);
     cy.wait("@passwordResponse").its("status").should("eq", 200); //Request Done.
     cy.modalClose();
   });
@@ -83,7 +87,7 @@ describe("Testing the My accounts section", () => {
   });
 
   it("Changing the password by inputting incorrect current password", () => {
-    cy.changePassword("abc", "litmus@123", "litmus@123");
+    cy.changePassword("abc", user.NewPassword, user.NewPassword);
     cy.wait("@passwordResponse").its("status").should("eq", 401); //Request Done.
     cy.contains("Error").should("be.visible");
     cy.modalClose();
@@ -93,7 +97,7 @@ describe("Testing the My accounts section", () => {
     cy.logout();
     cy.server();
     cy.route("POST", "/auth/login").as("loginResponse"); //Alias for Login Route
-    cy.login("admin", "litmus");
+    cy.login(user.AdminName, user.AdminPassword);
     cy.wait("@loginResponse").its("status").should("eq", 200); //Request Done.
     cy.contains("Congratulations").should("be.visible"); //confirmation of HomePage loaded.
   });

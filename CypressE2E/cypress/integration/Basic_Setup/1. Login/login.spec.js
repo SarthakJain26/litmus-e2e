@@ -1,7 +1,10 @@
 /// <reference types="Cypress" />
+
+let user;
 describe("Testing the accessibility of Login page",()=>{
     
     it("Visiting the Login Page",()=>{
+        cy.clearCookie('token');
         indexedDB.deleteDatabase('localforage');
         cy.visit("/login");
         cy.url().should('include','/login');
@@ -12,26 +15,25 @@ describe("Testing the accessibility of Login page",()=>{
 describe("Checking functionality of Login Page",()=>{
    
     beforeEach("Visit Login Page",()=>{
+        cy.clearCookie('token');
+        indexedDB.deleteDatabase('localforage');
+        cy.fixture("Users").then(User=>{
+            user = User;
+        });
         cy.visit('/login');
     })
   
-    it("Checking Input areas functionallity",()=>{
-        cy.login("Vedant","Litmus");
-        cy.get("[data-cy=inputName] input").should("have.value","Vedant");
-        cy.get("[data-cy=inputPassword] input").should("have.value","Litmus");
-    })
-
     it("Testing the only single input sign in [ Should not be possible ]",()=>{
-        cy.login("admin"," ");
+        cy.login(user.AdminName," ");
         cy.url().should('include','/login');
         cy.get('[data-cy=inputName] input').clear();
         cy.get('[data-cy=inputPassword] input').clear();
-        cy.login(" ","litmus")
+        cy.login(" ",user.AdminPassword);
         cy.contains("Wrong Credentials").should('be.visible');
     })
 
     it("Testing with wrong details [ Should not be possible ]",()=>{
-        cy.login("Vedant","1234");
+        cy.login("john","1234");
         cy.url().should('include','/login');
         cy.contains("Wrong Credentials").should('be.visible');
     })
@@ -43,7 +45,7 @@ describe("Checking functionality of Login Page",()=>{
     })
 
     it("Testing with Correct details [ Must redirect to Welcome modal ]",()=>{
-        cy.login("admin","litmus");
+        cy.login(user.AdminName,user.AdminPassword);
         cy.contains("Welcome to Litmus Portal");
     })
 })

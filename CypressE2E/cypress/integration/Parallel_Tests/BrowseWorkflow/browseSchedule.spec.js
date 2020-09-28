@@ -1,7 +1,7 @@
 /// <reference types="Cypress" />
 describe("Testing the Browse Schedule Tab", () => {
 	//Login before initialization of test cases
-	beforeEach("Clearing local storage", () => {
+	before("Clearing local storage", () => {
 		cy.clearCookie("token");
 		indexedDB.deleteDatabase("localforage");
 		cy.requestLogin();

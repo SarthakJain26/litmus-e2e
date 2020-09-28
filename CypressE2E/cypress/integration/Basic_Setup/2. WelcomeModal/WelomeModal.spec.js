@@ -1,12 +1,19 @@
 /// <reference types="Cypress" />
 
+let user;
 describe("Testing the accessibility of Welcome Modal",()=>{
 
-    beforeEach("Clearing local storage",()=>{
+    before("Clearing local storage",()=>{
         cy.clearCookie('token');
         indexedDB.deleteDatabase('localforage');
-        cy.visit('/');
-        cy.login("admin","litmus");
+        cy.fixture("Users").then(User=>{
+            user = User;
+        });
+        cy.requestLogin();
+    });
+
+    beforeEach("Refreshing page",()=>{
+        cy.visit("/");
     })
 
     it("Visiting the Welcome Modal after Login",()=>{
@@ -18,16 +25,15 @@ describe("Testing the accessibility of Welcome Modal",()=>{
         cy.get('[data-cy=InputProjectName] input').type(' ');
         cy.get('[data-cy=Continue]').click();
         cy.contains('Congratulations').should('not.be.visible');
-
     });
 
     it("Using Modal by partially inputting details",()=>{
-        cy.welcomeModalInputs('Project','admin','litmus',' ');
+        cy.welcomeModalInputs(user.projectname,user.AdminName,user.AdminPassword,' ');
         cy.contains('Congratulations').should('not.be.visible');
     });
     
     it("Using Modal by inputting all details",()=>{
-        cy.welcomeModalInputs('Project','admin','litmus','John@gmail.com');
+        cy.welcomeModalInputs(user.projectname,user.AdminName,user.AdminPassword,user.AdminEmail);
         cy.contains('Congratulations').should('be.visible');
     });
 

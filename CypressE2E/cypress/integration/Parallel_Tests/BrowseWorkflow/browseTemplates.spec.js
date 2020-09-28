@@ -5,11 +5,12 @@ describe("Testing the Templates Tab", () => {
 		return str.replace(/^\w/, (c) => c.toUpperCase());
 	};
 	//Login before initialization of test cases
-	beforeEach("Clearing local storage", () => {
+	before("Clearing local storage", () => {
 		cy.clearCookie("token");
 		indexedDB.deleteDatabase("localforage");
 		cy.requestLogin();
 		cy.visit("/");
+		cy.wait(3000);
 	});
 
 	it("Visiting the Templates tab", () => {

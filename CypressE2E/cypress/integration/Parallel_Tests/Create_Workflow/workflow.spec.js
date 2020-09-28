@@ -6,6 +6,8 @@ describe("Testing the create Workflow Utility",()=>{
         cy.clearCookies();
         indexedDB.deleteDatabase('localforage');
         cy.requestLogin();
+        cy.visit('/');
+        cy.wait(3000); // Needs to be removed after frontend is fixed.
     });
 
     it("Checking the accessibility of the Create-Workflow Page",()=>{
