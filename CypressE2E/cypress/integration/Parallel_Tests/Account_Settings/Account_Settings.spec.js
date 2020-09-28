@@ -85,6 +85,8 @@ describe("Testing the My accounts section", () => {
 
 
   it("Changing the password by inputting all the three password fields", () => {
+    cy.contains("Settings").click();
+    cy.get("[data-cy=my-account]").click();
     cy.changePassword(user.AdminPassword, user.NewPassword, user.NewPassword);
     cy.wait("@passwordResponse").its("status").should("eq", 200); //Request Done.
     cy.modalClose();

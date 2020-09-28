@@ -5,8 +5,12 @@ describe("Testing the Browse Schedule Tab", () => {
 		cy.clearCookie("token");
 		indexedDB.deleteDatabase("localforage");
 		cy.requestLogin();
-		cy.visit("/");
 	});
+
+	beforeEach("Refreshing the page and Restarting the waiting server",()=>{
+		cy.visit("/");
+		cy.server();
+	})
 	it("Visiting the Browse Schedule Tab and verifying the availability of data", () => {
 		cy.get("[data-cy=workflows]").click();
 		cy.url().should("contain", "workflows");
