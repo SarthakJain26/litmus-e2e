@@ -11,7 +11,7 @@ variables:
   npm_config_cache: "$CI_PROJECT_DIR/.npm"
   CYPRESS_CACHE_FOLDER: "$CI_PROJECT_DIR/cache/Cypress"
 
-cache:
+cache: &global_cache
   key: ${CI_PROJECT_NAME}-${CI_COMMIT_REF_SLUG}
   paths:
     - .npm
@@ -75,6 +75,7 @@ PreTest-Setup:
   dependencies:
     - Portal-Setup
   cache:
+    <<: *global_cache
     policy: pull
 
 .cypress-e2e:
@@ -93,6 +94,7 @@ PreTest-Setup:
   dependencies:
     - Portal-Setup
   cache:
+    <<: *global_cache
     policy: pull
 
 # cypress-e2e:
