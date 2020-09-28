@@ -84,24 +84,24 @@ describe("Testing the My accounts section", () => {
   });
 
 
-  it("Changing the password by inputting all the three password fields", () => {
-    cy.contains("Settings").click();
-    cy.get("[data-cy=my-account]").click();
-    cy.changePassword(user.AdminPassword, user.NewPassword, user.NewPassword);
-    cy.wait("@passwordResponse").its("status").should("eq", 200); //Request Done.
-    cy.modalClose();
-    cy.get("[data-cy=done]").should("not.exist");
-    cy.logout();
-    cy.url().should("include", "/login");
-    cy.server();
-    cy.route("POST", "/auth/login").as("loginResponse"); //Alias for Login Route
-    cy.login(user.AdminName, user.NewPassword);
-    cy.wait("@loginResponse").its("status").should("eq", 200); //Request Done.
-    cy.contains("Congratulations").should("be.visible"); //confirmation of HomePage loaded.
-    cy.log("Reverting back the password to litmus");
-    cy.contains("Settings").click();
-    cy.changePassword(user.NewPassword, user.AdminPassword, user.AdminPassword);
-    cy.wait("@passwordResponse").its("status").should("eq", 200); //Request Done.
-    cy.modalClose();
-  });
+  // it("Changing the password by inputting all the three password fields", () => {
+  //   cy.contains("Settings").click();
+  //   cy.get("[data-cy=my-account]").click();
+  //   cy.changePassword(user.AdminPassword, user.NewPassword, user.NewPassword);
+  //   cy.wait("@passwordResponse").its("status").should("eq", 200); //Request Done.
+  //   cy.modalClose();
+  //   cy.get("[data-cy=done]").should("not.exist");
+  //   cy.logout();
+  //   cy.url().should("include", "/login");
+  //   cy.server();
+  //   cy.route("POST", "/auth/login").as("loginResponse"); //Alias for Login Route
+  //   cy.login(user.AdminName, user.NewPassword);
+  //   cy.wait("@loginResponse").its("status").should("eq", 200); //Request Done.
+  //   cy.contains("Congratulations").should("be.visible"); //confirmation of HomePage loaded.
+  //   cy.log("Reverting back the password to litmus");
+  //   cy.contains("Settings").click();
+  //   cy.changePassword(user.NewPassword, user.AdminPassword, user.AdminPassword);
+  //   cy.wait("@passwordResponse").its("status").should("eq", 200); //Request Done.
+  //   cy.modalClose();
+  // });
 });
