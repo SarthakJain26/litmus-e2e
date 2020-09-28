@@ -2,12 +2,15 @@
 describe("Testing the Browse Workflow Tab", () => {
 	//Login before initialization of test cases
 	before("Clearing local storage", () => {
-		cy.server();
 		cy.clearCookie("token");
 		indexedDB.deleteDatabase("localforage");
 		cy.requestLogin();
-		cy.visit("/");
 	});
+
+	beforeEach("Refreshing page and starting server",()=>{
+		cy.server();
+		cy.visit("/");
+	})
 	it("Visiting the browse workflow page and verifying the availability of data", () => {
 		cy.wait(2000); //Waiting for the homepage to load successfully
 		cy.route({
