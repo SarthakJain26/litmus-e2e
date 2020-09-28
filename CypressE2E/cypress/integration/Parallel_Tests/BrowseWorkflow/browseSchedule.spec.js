@@ -12,8 +12,9 @@ describe("Testing the Browse Schedule Tab", () => {
 		cy.server();
 	})
 	it("Visiting the Browse Schedule Tab and verifying the availability of data", () => {
+		cy.wait(3000);
 		cy.get("[data-cy=workflows]").click();
-		cy.url().should("contain", "workflows");
+		cy.url().should("contain", "/workflows");
 		cy.get("[data-cy=browseSchedule] > .MuiTab-wrapper");
 		cy.server();
 		cy.route({

@@ -36,9 +36,8 @@ describe("Testing the Templates Tab", () => {
 				.map((text) => `${capitalize(text)} `)
 				.join("");
 			//Clicking on individual template card and redirecting to the details page
-			cy.contains(templateName)
-				.click()
-				.visit(`/workflows/template/${templateName}`)
+			cy.contains(templateName).click()
+
 			//Checking if the name on template is same in the details page
 			cy.get("[data-cy=expName]").should("contain", expName);
 			cy.go("back");
