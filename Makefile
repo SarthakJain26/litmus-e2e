@@ -3,11 +3,6 @@
 
 IS_DOCKER_INSTALLED = $(shell which docker >> /dev/null 2>&1; echo $$?)
 
-# docker info
-# DOCKER_REPO ?= litmuschaos
-# DOCKER_IMAGE ?= litmus-e2e
-# DOCKER_TAG ?= ci
-
 TESTPATH ?= /home/udit/go/src/github.com/litmuschaos/litmus-e2e
 
 .PHONY: install-portal
@@ -16,9 +11,9 @@ install-portal:
 	@echo "-----------"
 	@echo "Installing Litmus-Portal"
 	@echo "-----------"
-	@sshpass -p ${portal_pass} ssh -o StrictHostKeyChecking=no ${portal_user}@${ip} -p ${port} -tt \
+	@sshpass -p ${portal_pass} ssh -o StrictHostKeyChecking=no ${portal_user}@${litmus_ip} -p ${port} -tt \
 	 "chmod 755 $(TESTPATH)/k8s_scripts/LitmusInstall.sh"
-	@sshpass -p ${portal_pass} ssh -o StrictHostKeyChecking=no ${portal_user}@${ip} -p ${port} -tt \
+	@sshpass -p ${portal_pass} ssh -o StrictHostKeyChecking=no ${portal_user}@${litmus_ip} -p ${port} -tt \
 	 "$(TESTPATH)/k8s_scripts/LitmusInstall.sh"
 
 .PHONY: cypress-setup
@@ -80,7 +75,7 @@ uninstall-portal:
 	@echo "-----------"
 	@echo "Uninstalling Litmus-Portal"
 	@echo "-----------"
-	@sshpass -p ${portal_pass} ssh -o StrictHostKeyChecking=no ${portal_user}@${ip} -p ${port} -tt \
+	@sshpass -p ${portal_pass} ssh -o StrictHostKeyChecking=no ${portal_user}@${litmus_ip} -p ${port} -tt \
 	 "chmod 755 $(TESTPATH)/k8s_scripts/LitmusUninstall.sh"
-	@sshpass -p ${portal_pass} ssh -o StrictHostKeyChecking=no ${portal_user}@${ip} -p ${port} -tt \
+	@sshpass -p ${portal_pass} ssh -o StrictHostKeyChecking=no ${portal_user}@${litmus_ip} -p ${port} -tt \
 	 "$(TESTPATH)/k8s_scripts/LitmusUninstall.sh"
