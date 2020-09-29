@@ -56,7 +56,7 @@ Cypress-Setup:
   # tags:
   #   - litmus-portal-2
   script:
-    - cd CypressE2E && npm ci --prefer-offline
+    - make Cypress-Setup
 
 PreTest-Setup:
   when: always
@@ -67,7 +67,7 @@ PreTest-Setup:
   #   - litmus-portal-2
   script:
     - echo ${FRONTEND_IP}
-    - cd CypressE2E && CYPRESS_BASE_URL=http://${FRONTEND_IP}:9091/ npm run BasicSetup_Tests
+    - make Basic-Setup
   artifacts:
     when: always
     paths:
@@ -97,46 +97,10 @@ PreTest-Setup:
     <<: *global_cache
     policy: pull
 
-# cypress-e2e:
-#   when: always
-#   stage: pre-test-setup
-#   image:
-#     name: cypress/included:5.2.0
-#     entrypoint: [""]
-#   tags:
-#     - litmus-portal-2
-#   script:
-#     - echo ${FRONTEND_IP}
-#     - CYPRESS_BASE_URL=http://${FRONTEND_IP}:9091/ cypress run --project ./CypressE2E --spec 'CypressE2E/cypress/integration/Basic_Setup/**/*.spec.js'
-#   artifacts:
-#     when: always
-#     paths:
-#       - CypressE2E/cypress/screenshots/**/*.png
-#   dependencies:
-#     - Portal-Setup
-
-# cypress-e2e-2:
-#   when: always
-#   stage: cypress-test
-#   image:
-#     name: cypress/base:10
-#   tags:
-#     - litmus-portal-2
-#   script:
-#     - echo ${FRONTEND_IP}
-#     - cd CypressE2E && CYPRESS_BASE_URL=http://${FRONTEND_IP}:9091/ npm run Routes_Test
-#   artifacts:
-#     when: always
-#     paths:
-#       - CypressE2E/cypress/screenshots
-#   dependencies:
-#     - Portal-Setup
-
-
 routesCheck_Tests:
   extends: .cypress-e2e
   script:
-    - cd CypressE2E && CYPRESS_BASE_URL=http://${FRONTEND_IP}:9091/ npm run Routes_Tests
+    - make Routes-Check
 
 createWorkflow_Tests:
   extends: .cypress-e2e
@@ -146,55 +110,17 @@ createWorkflow_Tests:
 communityData_Tests:
   extends: .cypress-e2e
   script: 
-    - cd CypressE2E && CYPRESS_BASE_URL=http://${FRONTEND_IP}:9091/ npm run Community_Tests
+    - make Community-Check
 
 accountSettings_Tests:
   extends: .cypress-e2e
   script: 
-    - cd CypressE2E && CYPRESS_BASE_URL=http://${FRONTEND_IP}:9091/ npm run AccountSettings_Tests
+    - make Account-Settings-Check
 
 browseWorkflow_Tests:
   extends: .cypress-e2e
   script: 
-    - cd CypressE2E && CYPRESS_BASE_URL=http://${FRONTEND_IP}:9091/ npm run BrowseWorkflow_Tests
-
-
-# all jobs that actually run tests can use the same definition
-# .job_template:
-#   when: always
-#   image:
-#     name: cypress/included:5.2.0
-#     # cypress/included images have entrypoint set to "cypress"
-#     # which conflicts with GitLab CI wrapper shell script
-#     entrypoint: [""]
-#   stage: cypress-test
-#   tags:
-#     - litmus-portal-2
-#   artifacts:
-#     when: always
-#     paths:
-#       - CypressE2E/cypress/screenshots/**/*.png
-#     expire_in: 1 day
-#   dependencies:
-#     - Portal-Setup
-
-# actual job definitions
-# all steps are the same, they come from the template above
-# CommunityData-Check:
-#   extends: .job_template
-#   script: CYPRESS_BASE_URL=http://${FRONTEND_IP}:9091/ cypress run --project ./CypressE2E --spec 'CypressE2E/cypress/integration/Parallel_Tests/Community/*.spec.js'
-
-# Routes-Check:
-#   extends: .job_template
-#   script: CYPRESS_BASE_URL=http://${FRONTEND_IP}:9091/ cypress run --project ./CypressE2E --spec 'CypressE2E/cypress/integration/Parallel_Tests/Routes/*.spec.js'
-
-# CreateWorkflow-Check:
-#   extends: .job_template
-#   script: CYPRESS_BASE_URL=http://${FRONTEND_IP}:9091/ cypress run --project ./CypressE2E --spec 'CypressE2E/cypress/integration/Parallel_Tests/Create_Workflow/*.spec.js'
-
-# AccountSettings-Check:
-#   extends: .job_template
-#   script: CYPRESS_BASE_URL=http://${FRONTEND_IP}:9091/ cypress run --project ./CypressE2E --spec 'CypressE2E/cypress/integration/Parallel_Tests/Account_Settings/*.spec.js'
+    - make Browse-Workflow-Check
 
 portal-cleanup:
   when: always
