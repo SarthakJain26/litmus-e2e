@@ -10,7 +10,7 @@ IS_DOCKER_INSTALLED = $(shell which docker >> /dev/null 2>&1; echo $$?)
 
 TESTPATH ?= /home/udit/go/src/github.com/litmuschaos/litmus-e2e
 
-.PHONY: Install-Portal
+.PHONY: install-portal
 install-portal:
 
 	@echo "-----------"
@@ -21,7 +21,7 @@ install-portal:
 	@sshpass -p ${portal_pass} ssh -o StrictHostKeyChecking=no ${portal_user}@${ip} -p ${port} -tt \
 	 "./${TESTPATH}/k8s_scripts/LitmusInstall.sh"
 
-.PHONY: Cypress-Setup
+.PHONY: cypress-setup
 cypress-setup:
 
 	@echo "-----------"
@@ -29,7 +29,7 @@ cypress-setup:
 	@echo "-----------"
 	cd CypressE2E && npm ci --prefer-offline
 
-.PHONY: Basic-Setup
+.PHONY: pre-test-setup
 pre-test-setup:
 
 	@echo "-----------"
@@ -38,7 +38,7 @@ pre-test-setup:
 	@echo "-----------"
 	cd CypressE2E && CYPRESS_BASE_URL=http://${FRONTEND_IP}:9091/ npm run BasicSetup_Tests
 
-.PHONY: Routes-Check
+.PHONY: routes-check
 routes-check:
 
 	@echo "-----------"
@@ -47,7 +47,7 @@ routes-check:
 	@echo "-----------"
 	cd CypressE2E && CYPRESS_BASE_URL=http://${FRONTEND_IP}:9091/ npm run Routes_Tests
 
-.PHONY: Account-Settings-Check
+.PHONY: account-settings-check
 account-settings-check:
 
 	@echo "-----------"
@@ -56,7 +56,7 @@ account-settings-check:
 	@echo "-----------"
 	cd CypressE2E && CYPRESS_BASE_URL=http://${FRONTEND_IP}:9091/ npm run AccountSettings_Tests
 
-.PHONY: Browse-Workflow-Check
+.PHONY: browse-workflow-check
 browse-workflow-check:
 
 	@echo "-----------"
@@ -65,7 +65,7 @@ browse-workflow-check:
 	@echo "-----------"
 	cd CypressE2E && CYPRESS_BASE_URL=http://${FRONTEND_IP}:9091/ npm run BrowseWorkflow_Tests
 
-.PHONY: Community-Check
+.PHONY: community-page-check
 community-page-check:
 
 	@echo "-----------"

@@ -56,7 +56,7 @@ Cypress-Setup:
   # tags:
   #   - litmus-portal-2
   script:
-    - make Cypress-Setup
+    - make cypress-setup
 
 PreTest-Setup:
   when: always
@@ -67,7 +67,7 @@ PreTest-Setup:
   #   - litmus-portal-2
   script:
     - echo ${FRONTEND_IP}
-    - make Basic-Setup
+    - make pre-test-setup
   artifacts:
     when: always
     paths:
@@ -100,7 +100,7 @@ PreTest-Setup:
 routesCheck_Tests:
   extends: .cypress-e2e
   script:
-    - make Routes-Check
+    - make routes-check
 
 createWorkflow_Tests:
   extends: .cypress-e2e
@@ -110,17 +110,17 @@ createWorkflow_Tests:
 communityData_Tests:
   extends: .cypress-e2e
   script: 
-    - make Community-Check
+    - make community-page-check
 
 accountSettings_Tests:
   extends: .cypress-e2e
   script: 
-    - make Account-Settings-Check
+    - make account-settings-check
 
 browseWorkflow_Tests:
   extends: .cypress-e2e
   script: 
-    - make Browse-Workflow-Check
+    - make browse-workflow-check
 
 portal-cleanup:
   when: always
