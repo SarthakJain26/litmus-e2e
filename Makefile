@@ -10,34 +10,69 @@ IS_DOCKER_INSTALLED = $(shell which docker >> /dev/null 2>&1; echo $$?)
 
 TESTPATH ?= /home/udit/go/src/github.com/litmuschaos/litmus-e2e
 
-.PHONY: install-portal
+.PHONY: Install-Portal
 -install-portal:
 
 	@echo "-----------"
 	@echo "Installing Litmus-Portal"
 	@echo "-----------"
 	@sshpass -p ${portal_pass} ssh -o StrictHostKeyChecking=no ${portal_user}@${ip} -p ${port} -tt \
-	 "chmod 755 ${TESTPATH}./install.sh"
+	 "chmod 755 ./${TESTPATH}/k8s_scripts/LitmusInstall.sh"
 	@sshpass -p ${portal_pass} ssh -o StrictHostKeyChecking=no ${portal_user}@${ip} -p ${port} -tt \
-	 "${TESTPATH}./install.sh"
+	 "./${TESTPATH}/k8s_scripts/LitmusInstall.sh"
 
-.PHONY: cypress-setup
+.PHONY: Cypress-Setup
 -cypress-setup:
 
 	@echo "-----------"
-	@echo "Installing Cypress"
+	@echo "Warming up the cached dependencies of Cypress."
 	@echo "-----------"
-	@sshpass -p ${portal_pass} ssh -o StrictHostKeyChecking=no ${portal_user}@${ip} -p ${port} -tt \
-	 "cd ${TESTPATH}/CypressE2E && npm ci"
+	cd CypressE2E && npm ci --prefer-offline
 
-.PHONY: e2e-testing
--e2e-testing:
+.PHONY: Basic-Setup
+-pre-test-setup:
 
 	@echo "-----------"
-	@echo "Started Cypress e2e-testing"
+	@echo "Started Pre-test-setup"
+	@echo "Testing of Login system, welcome-modal functionality and creation of workflow will be done here."
 	@echo "-----------"
-	@sshpass -p ${portal_pass} ssh -o StrictHostKeyChecking=no ${portal_user}@${ip} -p ${port} -tt \
-	 "cd ${TESTPATH}/CypressE2E && CYPRESS_BASE_URL=http://${FRONTEND_IP}:9091/ npm test"
+	cd CypressE2E && CYPRESS_BASE_URL=http://${FRONTEND_IP}:9091/ npm run BasicSetup_Tests
+
+.PHONY: Routes-Check
+-routes-check:
+
+	@echo "-----------"
+	@echo "Started Routes Testing"
+	@echo "Testing of all routes before and after login will be done here."
+	@echo "-----------"
+	cd CypressE2E && CYPRESS_BASE_URL=http://${FRONTEND_IP}:9091/ npm run Routes_Tests
+
+.PHONY: Account-Settings-Check
+-account-settings-check:
+
+	@echo "-----------"
+	@echo "Started Account-Settings Tests"
+	@echo "Testing user-management,teaming and user details will be done here."
+	@echo "-----------"
+	cd CypressE2E && CYPRESS_BASE_URL=http://${FRONTEND_IP}:9091/ npm run AccountSettings_Tests
+
+.PHONY: Browse-Workflow-Check
+-browse-workflow-check:
+
+	@echo "-----------"
+	@echo "Started Browse-Tables Tests"
+	@echo "Testing of functionality of browse-workflow, browse-schedules and browse-templates tables will be done here."
+	@echo "-----------"
+	cd CypressE2E && CYPRESS_BASE_URL=http://${FRONTEND_IP}:9091/ npm run BrowseWorkflow_Tests
+
+.PHONY: Community-Check
+-community-page-check:
+
+	@echo "-----------"
+	@echo "Started Community page tests."
+	@echo "Testing of community page data will be done here."
+	@echo "-----------"
+	cd CypressE2E && CYPRESS_BASE_URL=http://${FRONTEND_IP}:9091/ npm run Community_Tests
 
 .PHONY: uninstall-portal
 -uninstall-portal:
@@ -46,6 +81,6 @@ TESTPATH ?= /home/udit/go/src/github.com/litmuschaos/litmus-e2e
 	@echo "Uninstalling Litmus-Portal"
 	@echo "-----------"
 	@sshpass -p ${portal_pass} ssh -o StrictHostKeyChecking=no ${portal_user}@${ip} -p ${port} -tt \
-	 "chmod 755 ${TESTPATH}./uninstall.sh"
+	 "chmod 755 ./${TESTPATH}/k8s_scripts/LitmusUninstall.sh"
 	@sshpass -p ${portal_pass} ssh -o StrictHostKeyChecking=no ${portal_user}@${ip} -p ${port} -tt \
-	 "${TESTPATH}./uninstall.sh"
+	 "./${TESTPATH}/k8s_scripts/LitmusUninstall.sh"

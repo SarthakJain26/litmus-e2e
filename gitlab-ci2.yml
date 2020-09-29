@@ -2,6 +2,7 @@ stages:
   - setup
   - portal-setup
   - test-setup
+  - pre-test-setup
   - cypress-test
   - portal-cleanup
   - cleanup
@@ -10,8 +11,8 @@ variables:
   npm_config_cache: "$CI_PROJECT_DIR/.npm"
   CYPRESS_CACHE_FOLDER: "$CI_PROJECT_DIR/cache/Cypress"
 
-cache:
-  key: ${CI_COMMIT_REF_SLUG}
+cache: &global_cache
+  key: ${CI_PROJECT_NAME}-${CI_COMMIT_REF_SLUG}
   paths:
     - .npm
     - cache/Cypress
@@ -21,7 +22,7 @@ Cluster Connect:
   image: jonsy13/runner:latest
   stage: setup
   tags:
-    - litmus-portal-2
+    - litmus-portal
   script:
     - chmod 755 ./build/gitlab/stages/1-gke-setup/cluster-setup
     - ./build/gitlab/stages/1-gke-setup/cluster-setup
@@ -35,10 +36,10 @@ Portal-Setup:
   image: jonsy13/runner:latest
   when: always
   stage: portal-setup
-  tags: 
-    - litmus-portal-2
+  tags:
+    - litmus-portal
   script:
-    - make install-portal
+    - make Install-Portal
   artifacts:
     when: always
     paths:
@@ -52,34 +53,78 @@ Cypress-Setup:
   stage: test-setup
   image: cypress/base:10
   tags:
-    - litmus-portal-2
+    - litmus-portal
   script:
-    - make cypress-setup
+    - make Cypress-Setup
 
-Cypress-e2e:
+PreTest-Setup:
   when: always
-  stage: cypress-test
-  image: cypress/base:10
+  stage: pre-test-setup
+  image:
+    name: cypress/base:10
   tags:
-    - litmus-portal-2
+    - litmus-portal
   script:
-    - make e2e-testing
+    - echo ${FRONTEND_IP}
+    - make Basic-Setup
   artifacts:
     when: always
     paths:
       - CypressE2E/cypress/screenshots
-      - CypressE2E/cypress/videos
   dependencies:
     - Portal-Setup
+  cache:
+    <<: *global_cache
+    policy: pull
+
+.cypress-e2e:
+  when: always
+  stage: cypress-test
+  image:
+    name: cypress/base:10
+  tags:
+    - litmus-portal
+  before_script:
+    - echo ${FRONTEND_IP}
+  artifacts:
+    when: always
+    paths:
+      - CypressE2E/cypress/screenshots
+  dependencies:
+    - Portal-Setup
+  cache:
+    <<: *global_cache
+    policy: pull
+
+routesCheck_Tests:
+  extends: .cypress-e2e
+  script:
+    - make Routes-Check
+
+communityData_Tests:
+  extends: .cypress-e2e
+  script: 
+    - make Community-Check
+
+accountSettings_Tests:
+  extends: .cypress-e2e
+  script: 
+    - make Account-Settings-Check
+
+browseWorkflow_Tests:
+  extends: .cypress-e2e
+  script: 
+    - make Browse-Workflow-Check
 
 portal-cleanup:
   when: always
   image: jonsy13/runner:latest
   stage: portal-cleanup
-  tags: 
-    - litmus-portal-2
+  tags:
+    - litmus-portal
   script:
-    - make uninstall-portal
+    - chmod 755 ./uninstall.sh
+    - ./uninstall.sh
   artifacts:
     when: always
     paths:
@@ -91,7 +136,7 @@ Cluster Disconnect:
   image: jonsy13/runner:latest
   stage: cleanup
   tags:
-    - litmus-portal-2
+    - litmus-portal
   script: 
     - chmod 755 ./build/gitlab/stages/2-gke-cleanup/cluster-cleanup
     - ./build/gitlab/stages/2-gke-cleanup/cluster-cleanup
