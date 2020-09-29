@@ -8,7 +8,7 @@ path=$(pwd)
 printf "***Conneting to the Cluster*****\n\n"
 
 ##Checking the Cluster Connection 
-sshpass -p $portal_pass ssh -o StrictHostKeyChecking=no $portal_user@$litmus_ip -p $port 'ls'
+sshpass -p ${portal_pass} ssh -o StrictHostKeyChecking=no $portal_user@$litmus_ip -p $port 'ls'
 ##Setup GOPATH
 sshpass -p $portal_pass ssh -o StrictHostKeyChecking=no $portal_user@$litmus_ip -p $port 'mkdir -p go/src/github.com/litmuschaos'
 echo "Go path created"
