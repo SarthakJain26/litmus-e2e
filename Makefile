@@ -17,9 +17,9 @@ install-portal:
 	@echo "Installing Litmus-Portal"
 	@echo "-----------"
 	@sshpass -p ${portal_pass} ssh -o StrictHostKeyChecking=no ${portal_user}@${ip} -p ${port} -tt \
-	 "chmod 755 ./${TESTPATH}/k8s_scripts/LitmusInstall.sh"
+	 "chmod 755 $(TESTPATH)/k8s_scripts/LitmusInstall.sh"
 	@sshpass -p ${portal_pass} ssh -o StrictHostKeyChecking=no ${portal_user}@${ip} -p ${port} -tt \
-	 "./${TESTPATH}/k8s_scripts/LitmusInstall.sh"
+	 "$(TESTPATH)/k8s_scripts/LitmusInstall.sh"
 
 .PHONY: cypress-setup
 cypress-setup:
@@ -81,6 +81,6 @@ uninstall-portal:
 	@echo "Uninstalling Litmus-Portal"
 	@echo "-----------"
 	@sshpass -p ${portal_pass} ssh -o StrictHostKeyChecking=no ${portal_user}@${ip} -p ${port} -tt \
-	 "chmod 755 ./${TESTPATH}/k8s_scripts/LitmusUninstall.sh"
+	 "chmod 755 $(TESTPATH)/k8s_scripts/LitmusUninstall.sh"
 	@sshpass -p ${portal_pass} ssh -o StrictHostKeyChecking=no ${portal_user}@${ip} -p ${port} -tt \
-	 "./${TESTPATH}/k8s_scripts/LitmusUninstall.sh"
+	 "$(TESTPATH)/k8s_scripts/LitmusUninstall.sh"
