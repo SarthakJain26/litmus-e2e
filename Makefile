@@ -11,7 +11,7 @@ IS_DOCKER_INSTALLED = $(shell which docker >> /dev/null 2>&1; echo $$?)
 TESTPATH ?= /home/udit/go/src/github.com/litmuschaos/litmus-e2e
 
 .PHONY: Install-Portal
--install-portal:
+install-portal:
 
 	@echo "-----------"
 	@echo "Installing Litmus-Portal"
@@ -22,7 +22,7 @@ TESTPATH ?= /home/udit/go/src/github.com/litmuschaos/litmus-e2e
 	 "./${TESTPATH}/k8s_scripts/LitmusInstall.sh"
 
 .PHONY: Cypress-Setup
--cypress-setup:
+cypress-setup:
 
 	@echo "-----------"
 	@echo "Warming up the cached dependencies of Cypress."
@@ -30,7 +30,7 @@ TESTPATH ?= /home/udit/go/src/github.com/litmuschaos/litmus-e2e
 	cd CypressE2E && npm ci --prefer-offline
 
 .PHONY: Basic-Setup
--pre-test-setup:
+pre-test-setup:
 
 	@echo "-----------"
 	@echo "Started Pre-test-setup"
@@ -39,7 +39,7 @@ TESTPATH ?= /home/udit/go/src/github.com/litmuschaos/litmus-e2e
 	cd CypressE2E && CYPRESS_BASE_URL=http://${FRONTEND_IP}:9091/ npm run BasicSetup_Tests
 
 .PHONY: Routes-Check
--routes-check:
+routes-check:
 
 	@echo "-----------"
 	@echo "Started Routes Testing"
@@ -48,7 +48,7 @@ TESTPATH ?= /home/udit/go/src/github.com/litmuschaos/litmus-e2e
 	cd CypressE2E && CYPRESS_BASE_URL=http://${FRONTEND_IP}:9091/ npm run Routes_Tests
 
 .PHONY: Account-Settings-Check
--account-settings-check:
+account-settings-check:
 
 	@echo "-----------"
 	@echo "Started Account-Settings Tests"
@@ -57,7 +57,7 @@ TESTPATH ?= /home/udit/go/src/github.com/litmuschaos/litmus-e2e
 	cd CypressE2E && CYPRESS_BASE_URL=http://${FRONTEND_IP}:9091/ npm run AccountSettings_Tests
 
 .PHONY: Browse-Workflow-Check
--browse-workflow-check:
+browse-workflow-check:
 
 	@echo "-----------"
 	@echo "Started Browse-Tables Tests"
@@ -66,7 +66,7 @@ TESTPATH ?= /home/udit/go/src/github.com/litmuschaos/litmus-e2e
 	cd CypressE2E && CYPRESS_BASE_URL=http://${FRONTEND_IP}:9091/ npm run BrowseWorkflow_Tests
 
 .PHONY: Community-Check
--community-page-check:
+community-page-check:
 
 	@echo "-----------"
 	@echo "Started Community page tests."
@@ -75,7 +75,7 @@ TESTPATH ?= /home/udit/go/src/github.com/litmuschaos/litmus-e2e
 	cd CypressE2E && CYPRESS_BASE_URL=http://${FRONTEND_IP}:9091/ npm run Community_Tests
 
 .PHONY: uninstall-portal
--uninstall-portal:
+uninstall-portal:
 
 	@echo "-----------"
 	@echo "Uninstalling Litmus-Portal"
