@@ -11,7 +11,6 @@ install-portal:
 	@echo "-----------"
 	@echo "Installing Litmus-Portal"
 	@echo "-----------"
-	@sshpass -p ${portal_pass} ssh -o StrictHostKeyChecking=no ${portal_user}@${litmus_ip} -p ${port} "cd $(TESTPATH) && ls"
 	@sshpass -p ${portal_pass} ssh -o StrictHostKeyChecking=no ${portal_user}@${litmus_ip} -p ${port} "chmod 755 $(TESTPATH)/k8s_scripts/LitmusInstall.sh"
 	@sshpass -p ${portal_pass} ssh -o StrictHostKeyChecking=no ${portal_user}@${litmus_ip} -p ${port} "$(TESTPATH)/k8s_scripts/LitmusInstall.sh"
 
