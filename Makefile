@@ -3,7 +3,7 @@
 
 IS_DOCKER_INSTALLED = $(shell which docker >> /dev/null 2>&1; echo $$?)
 
-TESTPATH ?= /home/udit/go/src/github.com/litmuschaos/litmus-e2e
+TESTPATH ?= /home/udit1/go/src/github.com/litmuschaos/litmus-e2e
 
 .PHONY: install-portal
 install-portal:
